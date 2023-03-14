@@ -4,35 +4,28 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "bid")
-public class Bid {
+@Table(name = "subcategory_list")
+public class SubcategoryList {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "category_id")
+    private Category category;
 
-    @Column
-    private Double bid;
-
-    @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "date", updatable = false)
-    private Date createdAt;
+    @ManyToOne
+    @JoinColumn(name = "subcategory_id")
+    private Subcategory subcategory;
 
 }
-
 

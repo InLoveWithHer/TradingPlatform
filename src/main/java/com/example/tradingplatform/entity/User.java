@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -19,22 +18,30 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
-public class Users implements UserDetails {
+public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @Column
     private String name;
+
     @Column
     private String surname;
+
     @Column
     private String patronymic;
-    @Column
+
+    @Column(nullable = false)
     private String email;
-    @Column
+
+    @Column(nullable = false)
     private String password;
+
     @Column
     private String phone;
+
     @Column
     private String role;
 

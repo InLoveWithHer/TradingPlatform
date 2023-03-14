@@ -17,29 +17,21 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Advertisements {
+@Table(name = "advertisement")
+public class Advertisement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String title;
 
     @Column
     private Double price;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "user_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
-    private Users user;
-
     @Column
     private String category;
-
-    @Column
-    private String subcategory;
 
     @Column
     private String status;
@@ -55,14 +47,28 @@ public class Advertisements {
     @Column(name = "createdAt", updatable = false)
     private Date createdAt;
 
-    public Advertisements(String title, double price, String category, String subcategory, String status, String description, String fileName, Users user) {
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "auction_id")
+    private Auction auction;
+
+
+    public Advertisement(String title, double price, String category, String subcategory, String status, String description, String fileName, User user, Auction auction) {
         this.title = title;
         this.price = price;
         this.category = category;
-        this.subcategory = subcategory;
         this.status = status;
         this.description = description;
         this.photoUrl = fileName;
         this.user = user;
+        this.auction= auction;
+    }
+
+    public Advertisement(String title, double price, String category, String subcategory, String status, String description, String fileName, User user) {
     }
 }

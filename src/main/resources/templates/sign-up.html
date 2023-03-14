@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Sign-up</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -12,22 +12,17 @@
 <main>
     <form th:action="@{/register}" method="post">
         <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
-        <div class="form-floating">
+        <div class="form-floating mb-3">
             <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com">
             <label for="email">Email address</label>
         </div>
-        <div class="form-floating">
+        <div class="form-floating mb-3">
             <input type="password" class="form-control" id="password" name="password" placeholder="Password">
             <label for="password">Password</label>
         </div>
-        <div class="form-floating">
+        <div class="form-floating mb-3">
             <input type="password" class="form-control" id="repeatPassword" name="repeatPassword" placeholder="Password">
-            <label for="repeatPassword">Repeat password</label>
-        </div>
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" name="remember-me" value="true"> Remember me
-            </label>
+            <label for="repeatPassword">Password</label>
         </div>
         <button class="w-100 btn btn-lg btn-primary" type="submit">Sign up</button>
         <div th:if="${param.error}" class="alert alert-danger mt-3" role="alert">
@@ -40,7 +35,7 @@
             Passwords do not match. Please try again.
         </div>
     </form>
-    <p>Есть аккаунт?<a href="/login"> Войти</a></p>
+    <p>Есть аккаунт? <a href="/login">Войти</a></p>
 
 </main>
 </body>
