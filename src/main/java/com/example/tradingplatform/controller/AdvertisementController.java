@@ -1,7 +1,12 @@
 package com.example.tradingplatform.controller;
 
 import com.example.tradingplatform.entity.Advertisement;
+import com.example.tradingplatform.entity.Category;
+import com.example.tradingplatform.entity.Subcategory;
+import com.example.tradingplatform.exception.ResNotFoundException;
 import com.example.tradingplatform.reposiroty.AuctionDuration;
+import com.example.tradingplatform.reposiroty.CategoryRepository;
+import com.example.tradingplatform.reposiroty.SubcategoryRepository;
 import com.example.tradingplatform.service.AdvertisementService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -14,13 +19,17 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
-@Controller
+@RestController
 public class AdvertisementController {
 
     private final AdvertisementService advertisementService;
+    private final CategoryRepository categoryRepository;
+    private final SubcategoryRepository subcategoryRepository;
 
-    public AdvertisementController(AdvertisementService advertisementService) {
+    public AdvertisementController(AdvertisementService advertisementService, CategoryRepository categoryRepository, SubcategoryRepository subcategoryRepository) {
         this.advertisementService = advertisementService;
+        this.categoryRepository = categoryRepository;
+        this.subcategoryRepository = subcategoryRepository;
     }
 
     @GetMapping("/advertisements")
@@ -52,18 +61,34 @@ public class AdvertisementController {
 
     @PostMapping("/createAdvertisements")
     public ResponseEntity<Advertisement> createAdvertisement(@RequestParam("title") String title,
-                                                             @RequestParam("price") double price, @RequestParam("category") String category,
-                                                             @RequestParam("subcategory") String subcategory, @RequestParam("status") String status,
-                                                             @RequestParam("description") String description, @RequestParam("file") MultipartFile file,
-                                                             @RequestParam("userId") Long userId, @RequestParam("isAuction") boolean isAuction,
+                                                             @RequestParam(value = "price", required = false) Double price,
+                                                             @RequestParam("category") String categoryName,
+                                                             @RequestParam("subcategory") String subcategoryName,
+                                                             @RequestParam(value = "status", required = false) String status,
+                                                             @RequestParam("description") String description,
+                                                             @RequestParam(value = "type", required = false) String type,
+                                                             @RequestParam("file") MultipartFile file,
+                                                             @RequestParam("userId") Long userId,
+                                                             @RequestParam("isAuction") boolean isAuction,
                                                              @RequestParam(value = "auctionDuration", required = false) AuctionDuration auctionDuration,
                                                              @RequestParam(value = "auctionStartingBid", required = false) Double auctionStartingBid) throws IOException {
 
-        Advertisement advertisement = advertisementService.createAdvertisement(title, price, category, subcategory, status, description,
+        Category category = categoryRepository.findByName(categoryName);
+        if (category == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Subcategory subcategory = subcategoryRepository.findByName(subcategoryName);
+        if (subcategory == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Advertisement advertisement = advertisementService.createAdvertisement(title, price, category.getId(), subcategory.getId(), status, description, type,
                 file, userId, isAuction, auctionDuration, auctionStartingBid);
 
         return new ResponseEntity<>(advertisement, HttpStatus.CREATED);
     }
+
 
 
     @PutMapping("/advertisements/{id}")

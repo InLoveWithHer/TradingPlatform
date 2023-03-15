@@ -43,7 +43,7 @@ public class User implements UserDetails {
     private String phone;
 
     @Column
-    private String role;
+    private String role = "USER";
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

@@ -24,9 +24,6 @@ public class Category {
     private String name;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Advertisement> advertisements;
-
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SubcategoryList> subcategoryLists;
+    private List<Subcategory> subcategories;
 
 }

@@ -24,14 +24,19 @@ public class Advertisement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private String title;
 
     @Column
     private Double price;
 
-    @Column
-    private String category;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subcategory_id")
+    private Subcategory subcategory;
 
     @Column
     private String status;
@@ -42,13 +47,16 @@ public class Advertisement {
     @Column
     private String description;
 
+    @Column
+    private String type;
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "createdAt", updatable = false)
     private Date createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private User user;
@@ -58,17 +66,28 @@ public class Advertisement {
     private Auction auction;
 
 
-    public Advertisement(String title, double price, String category, String subcategory, String status, String description, String fileName, User user, Auction auction) {
+    public Advertisement(String title,Double price, Category category, Subcategory subcategory, String status, String description, String type, String fileName, User user, Auction auction) {
         this.title = title;
         this.price = price;
         this.category = category;
+        this.subcategory = subcategory;
         this.status = status;
         this.description = description;
+        this.type = type;
         this.photoUrl = fileName;
         this.user = user;
         this.auction= auction;
     }
 
-    public Advertisement(String title, double price, String category, String subcategory, String status, String description, String fileName, User user) {
+    public Advertisement(String title, Double price, Category category, Subcategory subcategory, String status, String description, String type, String fileName, User user) {
+        this.title = title;
+        this.price = price;
+        this.category = category;
+        this.subcategory = subcategory;
+        this.status = status;
+        this.description = description;
+        this.type = type;
+        this.photoUrl = fileName;
+        this.user = user;
     }
 }
