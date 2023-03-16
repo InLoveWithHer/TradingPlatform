@@ -91,4 +91,13 @@ public class Advertisement {
         this.photoUrl = fileName;
         this.user = user;
     }
+
+    public String getCategoryName() {
+        return this.category.getName();
+    }
+
+    public String getSubcategoryName() {
+        return this.subcategory.getName();
+    }
+
 }
