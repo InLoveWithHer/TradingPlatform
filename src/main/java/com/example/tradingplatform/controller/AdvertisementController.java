@@ -3,24 +3,34 @@ package com.example.tradingplatform.controller;
 import com.example.tradingplatform.entity.Advertisement;
 import com.example.tradingplatform.entity.Category;
 import com.example.tradingplatform.entity.Subcategory;
+import com.example.tradingplatform.entity.User;
 import com.example.tradingplatform.reposiroty.AuctionDuration;
 import com.example.tradingplatform.reposiroty.CategoryRepository;
 import com.example.tradingplatform.reposiroty.SubcategoryRepository;
 import com.example.tradingplatform.service.AdvertisementService;
+import com.example.tradingplatform.service.CategoryService;
+import com.example.tradingplatform.service.SubcategoryService;
+import com.example.tradingplatform.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.net.URI;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class AdvertisementController {
@@ -28,11 +38,17 @@ public class AdvertisementController {
     private final AdvertisementService advertisementService;
     private final CategoryRepository categoryRepository;
     private final SubcategoryRepository subcategoryRepository;
+    private final UserService userService;
+    private final CategoryService categoryService;
+    private final SubcategoryService subcategoryService;
 
-    public AdvertisementController(AdvertisementService advertisementService, CategoryRepository categoryRepository, SubcategoryRepository subcategoryRepository) {
+    public AdvertisementController(AdvertisementService advertisementService, CategoryRepository categoryRepository, SubcategoryRepository subcategoryRepository, UserService userService, CategoryService categoryService, SubcategoryService subcategoryService) {
         this.advertisementService = advertisementService;
         this.categoryRepository = categoryRepository;
         this.subcategoryRepository = subcategoryRepository;
+        this.userService = userService;
+        this.categoryService = categoryService;
+        this.subcategoryService = subcategoryService;
     }
 
     @GetMapping("/advertisements")
@@ -78,38 +94,60 @@ public class AdvertisementController {
         return "search";
     }
 
+    @GetMapping("/createAdvertisements")
+    public String createAdvertisementForm(Model model) {
+        model.addAttribute("categories", categoryRepository.findAll());
+        return "create-advertisement";
+    }
 
+    @GetMapping("/subcategory/{category}")
+    @ResponseBody
+    public List<String> getSubcategoriesByCategory(@PathVariable String category) {
+        Category categoryObj = categoryService.getCategoryByName(category);
+        if (categoryObj == null) {
+            return Collections.emptyList();
+        }
+        List<Subcategory> subcategories = subcategoryService.getSubcategoriesByCategory(categoryObj);
+        return subcategories.stream()
+                .map(Subcategory::getName)
+                .collect(Collectors.toList());
+    }
 
     @PostMapping("/createAdvertisements")
-    public ResponseEntity<Advertisement> createAdvertisement(@RequestParam("title") String title,
-                                                             @RequestParam(value = "price", required = false) Double price,
-                                                             @RequestParam("category") String categoryName,
-                                                             @RequestParam("subcategory") String subcategoryName,
-                                                             @RequestParam(value = "status", required = false) String status,
-                                                             @RequestParam("description") String description,
-                                                             @RequestParam(value = "type", required = false) String type,
-                                                             @RequestParam("file") MultipartFile file,
-                                                             @RequestParam("userId") Long userId,
-                                                             @RequestParam("isAuction") boolean isAuction,
-                                                             @RequestParam(value = "auctionDuration", required = false) AuctionDuration auctionDuration,
-                                                             @RequestParam(value = "auctionStartingBid", required = false) Double auctionStartingBid) throws IOException {
+    public String createAdvertisement(Authentication authentication, @RequestParam("title") String title,
+                                      @RequestParam(value = "price", required = false) Double price,
+                                      @RequestParam("category") String categoryName,
+                                      @RequestParam("subcategory") String subcategoryName,
+                                      @RequestParam(value = "status", required = false) String status,
+                                      @RequestParam("description") String description,
+                                      @RequestParam(value = "type", required = false) String type,
+                                      @RequestParam("file") MultipartFile file,
+                                      @RequestParam(value = "isAuction", defaultValue = "false") String isAuctionStr,
+                                      @RequestParam(value = "auctionDuration", required = false) AuctionDuration auctionDuration,
+                                      @RequestParam(value = "auctionStartingBid", required = false) Double auctionStartingBid,
+                                      RedirectAttributes redirectAttributes) throws IOException {
 
         Category category = categoryRepository.findByName(categoryName);
         if (category == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return "redirect:/";
         }
 
         Subcategory subcategory = subcategoryRepository.findByName(subcategoryName);
         if (subcategory == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return "redirect:/";
         }
 
+        User user = userService.getByEmail(authentication.getName());
+
+        boolean isAuction = Boolean.parseBoolean(isAuctionStr);
+
         Advertisement advertisement = advertisementService.createAdvertisement(title, price, category.getId(), subcategory.getId(), status, description, type,
-                file, userId, isAuction, auctionDuration, auctionStartingBid);
+                file, user.getId(), isAuction, auctionDuration, auctionStartingBid);
 
-        return new ResponseEntity<>(advertisement, HttpStatus.CREATED);
+        redirectAttributes.addAttribute("id", advertisement.getId());
+
+        return "redirect:/advertisement/{id}";
     }
-
 
 
     @PutMapping("/advertisements/{id}")

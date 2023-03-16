@@ -7,6 +7,8 @@ import com.example.tradingplatform.reposiroty.CategoryRepository;
 import com.example.tradingplatform.reposiroty.SubcategoryRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SubcategoryService {
 
@@ -25,6 +27,10 @@ public class SubcategoryService {
         subcategory.setName(name);
         subcategory.setCategory(category);
         return subcategoryRepository.save(subcategory);
+    }
+
+    public List<Subcategory> getSubcategoriesByCategory(Category category) {
+        return subcategoryRepository.findByCategory(category);
     }
 
 }

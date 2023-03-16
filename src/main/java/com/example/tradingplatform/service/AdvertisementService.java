@@ -28,14 +28,17 @@ public class AdvertisementService {
     private final UserService userService;
     private final AuctionService auctionService;
 
+    private final UsersRepository usersRepository;
+
     @Autowired
-    public AdvertisementService(AdvertisementsRepository advertisementRepository, AuctionRepository auctionRepository, CategoryRepository categoryRepository, SubcategoryRepository subcategoryRepository, UserService userService, AuctionService auctionService) {
+    public AdvertisementService(AdvertisementsRepository advertisementRepository, AuctionRepository auctionRepository, CategoryRepository categoryRepository, SubcategoryRepository subcategoryRepository, UserService userService, AuctionService auctionService, UsersRepository usersRepository) {
         this.advertisementRepository = advertisementRepository;
         this.auctionRepository = auctionRepository;
         this.categoryRepository = categoryRepository;
         this.subcategoryRepository = subcategoryRepository;
         this.userService = userService;
         this.auctionService = auctionService;
+        this.usersRepository = usersRepository;
     }
 
     public Page<Advertisement> findLatestAdvertisements(int pageNumber, int pageSize) {
@@ -64,7 +67,6 @@ public class AdvertisementService {
     public Advertisement createAdvertisement(String title, Double price, Long categoryId, Long subcategoryId, String status, String description, String type,
                                              MultipartFile file, Long userId, boolean isAuction, AuctionDuration auctionDuration, Double auctionStartingBid) throws IOException {
 
-        User user = userService.getUserById(userId);
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
 
         Category category = categoryRepository.findById(categoryId)
@@ -73,12 +75,15 @@ public class AdvertisementService {
         Subcategory subcategory = subcategoryRepository.findById(subcategoryId)
                 .orElseThrow(() -> new ResNotFoundException("Subcategory not found with id " + subcategoryId));
 
+        User user = usersRepository.findById(userId)
+                .orElseThrow(() -> new ResNotFoundException("User not found with id " + userId));
+
         Advertisement advertisement = new Advertisement(title, price, category, subcategory, status, description, type, fileName, user);
-        advertisementRepository.save(advertisement); // сохраняем объявление в базе данных
+        advertisementRepository.save(advertisement);
 
         if (isAuction) {
-            Auction auction = auctionService.createAuction(auctionDuration, auctionStartingBid, advertisement); // передаем созданное объявление
-            advertisement.setAuction(auction); // устанавливаем связь с созданным аукционом
+            Auction auction = auctionService.createAuction(auctionDuration, auctionStartingBid, advertisement);
+            advertisement.setAuction(auction);
         }
 
         String uploadDir = "D:\\diplom\\TradingPlatform\\src\\main\\resources\\static\\images";
@@ -86,6 +91,7 @@ public class AdvertisementService {
 
         return advertisement;
     }
+
 
     public Advertisement updateAdvertisement(Long id, Advertisement advertisementDetails) {
         Advertisement advertisement = advertisementRepository.findById(id)

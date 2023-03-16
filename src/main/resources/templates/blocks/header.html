@@ -20,15 +20,14 @@
         </form>
 
         <div class="text-end">
+            <button type="button"  class="btn btn-outline-light me-2"><a th:href="@{/createAdvertisements}" class="nav-link px-2 text-white">Create new Advertisement</a></button>
             <th:block sec:authorize="isAnonymous()">
-
-            <button type="button"  class="btn btn-outline-light me-2"><a th:href="@{/login}" class="nav-link px-2 text-white">Sign-in</a></button>
-            <button type="button"  class="btn btn-warning"><a th:href="@{/register}" class="nav-link px-2 text-white">Sign-up</a></button>
+                <button type="button"  class="btn btn-outline-light me-2"><a th:href="@{/login}" class="nav-link px-2 text-white">Sign-in</a></button>
+                <button type="button"  class="btn btn-warning me-2"><a th:href="@{/register}" class="nav-link px-2 text-white">Sign-up</a></button>
             </th:block>
             <th:block sec:authorize="isAuthenticated()">
-
-            <button type="button"  class="btn btn-warning"><a th:href="@{/personal-area}" class="nav-link px-2 text-white">Кабінет</a></button>
-            <button type="button"  class="btn btn-outline-light me-2"><a th:href="@{/logout}" class="nav-link px-2 text-white">Выйти</a></button>
+                <button type="button"  class="btn btn-warning"><a th:href="@{/personal-area}" class="nav-link px-2 text-white">Кабінет</a></button>
+                <button type="button"  class="btn btn-outline-light me-2"><a th:href="@{/logout}" class="nav-link px-2 text-white">Выйти</a></button>
             </th:block>
         </div>
       </div>

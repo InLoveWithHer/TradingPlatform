@@ -21,4 +21,8 @@ public class CategoryService {
         category.setSubcategories(new ArrayList<>());
         return categoryRepository.save(category);
     }
+
+    public Category getCategoryByName(String categoryName) {
+        return categoryRepository.findByName(categoryName);
+    }
 }
