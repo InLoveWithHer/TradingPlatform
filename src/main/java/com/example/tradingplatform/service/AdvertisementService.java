@@ -43,14 +43,14 @@ public class AdvertisementService {
         return advertisementRepository.findAll(pageable);
     }
 
-
     public List<Advertisement> getLatestAdvertisements() {
         return advertisementRepository.findTop9ByOrderByCreatedAtDesc();
     }
 
-    public List<Advertisement> findByTitleContainingIgnoreCase(String searchTerm) {
-        return advertisementRepository.findByTitleContainingIgnoreCase(searchTerm);
+    public Page<Advertisement> findAdvertisementsByTitleContainingIgnoreCase(String searchTerm, Pageable pageable) {
+        return advertisementRepository.findByTitleContainingIgnoreCase(searchTerm, pageable);
     }
+
 
     public Advertisement getAdvertisementById(Long id) {
         Optional<Advertisement> advertisement = advertisementRepository.findById(id);
@@ -60,7 +60,6 @@ public class AdvertisementService {
             throw new ResNotFoundException("Advertisement not found with id " + id);
         }
     }
-
 
     public Advertisement createAdvertisement(String title, Double price, Long categoryId, Long subcategoryId, String status, String description, String type,
                                              MultipartFile file, Long userId, boolean isAuction, AuctionDuration auctionDuration, Double auctionStartingBid) throws IOException {
@@ -74,28 +73,19 @@ public class AdvertisementService {
         Subcategory subcategory = subcategoryRepository.findById(subcategoryId)
                 .orElseThrow(() -> new ResNotFoundException("Subcategory not found with id " + subcategoryId));
 
-        Advertisement advertisement;
+        Advertisement advertisement = new Advertisement(title, price, category, subcategory, status, description, type, fileName, user);
+        advertisementRepository.save(advertisement); // сохраняем объявление в базе данных
 
         if (isAuction) {
-            Auction auction = auctionService.createAuction(auctionDuration, auctionStartingBid, null); // передаем null, так как advertisement еще не создан
-            advertisement = new Advertisement(title, price, category, subcategory, status, description, type, fileName, user, auction);
-            auction.setAdvertisement(advertisement); // устанавливаем связь с созданным объявлением
-            auctionRepository.save(auction); // сохраняем аукцион с обновленной связью
-        } else {
-            advertisement = new Advertisement(title, price, category, subcategory, status, description, type, fileName, user);
+            Auction auction = auctionService.createAuction(auctionDuration, auctionStartingBid, advertisement); // передаем созданное объявление
+            advertisement.setAuction(auction); // устанавливаем связь с созданным аукционом
         }
-
-        advertisementRepository.save(advertisement);
-        advertisement.setPhotoUrl(fileName);
 
         String uploadDir = "D:\\diplom\\TradingPlatform\\src\\main\\resources\\static\\images";
         FileUploadUtil.saveFile(uploadDir, file);
 
         return advertisement;
     }
-
-
-
 
     public Advertisement updateAdvertisement(Long id, Advertisement advertisementDetails) {
         Advertisement advertisement = advertisementRepository.findById(id)

@@ -63,6 +63,7 @@ public class Advertisement {
 
     @ManyToOne
     @JoinColumn(name = "auction_id")
+    @JsonIgnore
     private Auction auction;
 
 

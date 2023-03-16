@@ -3,23 +3,26 @@ package com.example.tradingplatform.controller;
 import com.example.tradingplatform.entity.Advertisement;
 import com.example.tradingplatform.entity.Category;
 import com.example.tradingplatform.entity.Subcategory;
-import com.example.tradingplatform.exception.ResNotFoundException;
 import com.example.tradingplatform.reposiroty.AuctionDuration;
 import com.example.tradingplatform.reposiroty.CategoryRepository;
 import com.example.tradingplatform.reposiroty.SubcategoryRepository;
 import com.example.tradingplatform.service.AdvertisementService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.List;
 
-@RestController
+@Controller
 public class AdvertisementController {
 
     private final AdvertisementService advertisementService;
@@ -52,12 +55,30 @@ public class AdvertisementController {
     }
 
     @GetMapping("/search")
-    public String search(@RequestParam("search") String searchTerm, Model model) {
-        List<Advertisement> advertisements = advertisementService.findByTitleContainingIgnoreCase(searchTerm);
+    public String search(@RequestParam("search") String searchTerm,
+                         @RequestParam(defaultValue = "0") int page,
+                         Model model,
+                         UriComponentsBuilder uriBuilder) {
+        int pageSize = 6; // количество записей на странице
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<Advertisement> advertisementsPage = advertisementService.findAdvertisementsByTitleContainingIgnoreCase(searchTerm, pageable);
+        List<Advertisement> advertisements = advertisementsPage.getContent();
+        int totalPages = advertisementsPage.getTotalPages();
         model.addAttribute("advertisements", advertisements);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
         model.addAttribute("pageTitle", searchTerm);
+
+        // Добавление параметров поиска в URL для сохранения параметров при переходе на другую страницу
+        UriComponents uriComponents = uriBuilder.path("/search")
+                .queryParam("search", searchTerm)
+                .queryParam("page", page + 1)
+                .build();
+        model.addAttribute("nextPageUrl", uriComponents.toUriString());
         return "search";
     }
+
+
 
     @PostMapping("/createAdvertisements")
     public ResponseEntity<Advertisement> createAdvertisement(@RequestParam("title") String title,
