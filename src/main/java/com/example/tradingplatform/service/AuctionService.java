@@ -30,8 +30,10 @@ public class AuctionService {
         Date endDate = calendar.getTime();
         auction.setEndDate(endDate);
 
+        advertisement.setAuction(auction); // Устанавливаем аукцион в объекте Advertisement
         return auctionRepository.save(auction);
     }
+
 
 
 

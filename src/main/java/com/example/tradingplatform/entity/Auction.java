@@ -32,7 +32,7 @@ public class Auction {
     private Advertisement advertisement;
 
     @OneToMany(mappedBy = "auction", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ListOfUserBid> listOfUserBids;
+    private List<Bid> bids;
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;

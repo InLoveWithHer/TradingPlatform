@@ -84,6 +84,7 @@ public class AdvertisementService {
         if (isAuction) {
             Auction auction = auctionService.createAuction(auctionDuration, auctionStartingBid, advertisement);
             advertisement.setAuction(auction);
+            advertisementRepository.save(advertisement); // Сохраняем обновленное объявление вместе с аукционом
         }
 
         String uploadDir = "D:\\diplom\\TradingPlatform\\src\\main\\resources\\static\\images";
@@ -91,7 +92,6 @@ public class AdvertisementService {
 
         return advertisement;
     }
-
 
     public Advertisement updateAdvertisement(Long id, Advertisement advertisementDetails) {
         Advertisement advertisement = advertisementRepository.findById(id)

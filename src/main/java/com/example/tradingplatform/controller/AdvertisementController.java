@@ -64,11 +64,13 @@ public class AdvertisementController {
     }
 
     @GetMapping("/advertisement/{id}")
-    public String getAdvertisementById(@PathVariable Long id, Model model) {
+    public String showAdvertisement(@PathVariable("id") Long id, Model model) {
         Advertisement advertisement = advertisementService.getAdvertisementById(id);
         model.addAttribute("advertisement", advertisement);
         return "advertisement";
     }
+
+
 
     @GetMapping("/search")
     public String search(@RequestParam("search") String searchTerm,
@@ -122,7 +124,7 @@ public class AdvertisementController {
                                       @RequestParam("description") String description,
                                       @RequestParam(value = "type", required = false) String type,
                                       @RequestParam("file") MultipartFile file,
-                                      @RequestParam(value = "isAuction", defaultValue = "false") String isAuctionStr,
+                                      @RequestParam(value = "isAuction", defaultValue = "false") boolean isAuction,
                                       @RequestParam(value = "auctionDuration", required = false) AuctionDuration auctionDuration,
                                       @RequestParam(value = "auctionStartingBid", required = false) Double auctionStartingBid,
                                       RedirectAttributes redirectAttributes) throws IOException {
@@ -138,8 +140,6 @@ public class AdvertisementController {
         }
 
         User user = userService.getByEmail(authentication.getName());
-
-        boolean isAuction = Boolean.parseBoolean(isAuctionStr);
 
         Advertisement advertisement = advertisementService.createAdvertisement(title, price, category.getId(), subcategory.getId(), status, description, type,
                 file, user.getId(), isAuction, auctionDuration, auctionStartingBid);

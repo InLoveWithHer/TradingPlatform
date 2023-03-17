@@ -1,5 +1,6 @@
 package com.example.tradingplatform.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,6 +34,10 @@ public class Bid {
     @Column(name = "date", updatable = false)
     private Date createdAt;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "auction_id")
+    @JsonIgnore
+    private Auction auction;
 }
 
 
