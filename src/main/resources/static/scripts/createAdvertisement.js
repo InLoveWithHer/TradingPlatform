@@ -12,15 +12,30 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
+    $('#price').on('input', function() {
+        var inputValue = $(this).val();
+        if (!/^(0|[1-9]\d*)(\.\d+)?$/.test(inputValue)) {
+            $(this).val(inputValue.replace(/^0+/, '').replace(/^\./, ''));
+        }
+    });
+    $('#auctionStartingBid').on('input', function() {
+        var inputValue = $(this).val();
+        if (!/^(0|[1-9]\d*)(\.\d+)?$/.test(inputValue)) {
+            $(this).val(inputValue.replace(/^0+/, '').replace(/^\./, ''));
+        }
+    });
+});
+
+$(document).ready(function() {
     $('#isAuction').on('change', function() {
         if ($(this).is(':checked')) {
-            $('#price').prop('disabled', true);
+            $('#price').val('').prop('disabled', true);
             $('#auctionDuration').prop('disabled', false);
             $('#auctionStartingBid').prop('disabled', false);
         } else {
             $('#price').prop('disabled', false);
             $('#auctionDuration').prop('disabled', true);
-            $('#auctionStartingBid').prop('disabled', true);
+            $('#auctionStartingBid').val('').prop('disabled', true);
         }
     });
 });
@@ -50,5 +65,18 @@ $(document).ready(function() {
         }
     });
 });
+
+function getName(str) {
+    if (str.lastIndexOf('\\')) {
+        var i = str.lastIndexOf('\\') + 1;
+    } else {
+        var i = str.lastIndexOf('/') + 1;
+    }
+    var filename = str.slice(i);
+    var uploaded = document.getElementById("fileFormLabel");
+    uploaded.innerHTML = filename;
+}
+
+
 
 

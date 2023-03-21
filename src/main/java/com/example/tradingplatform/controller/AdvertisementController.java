@@ -123,7 +123,7 @@ public class AdvertisementController {
                                       @RequestParam(value = "status", required = false) String status,
                                       @RequestParam("description") String description,
                                       @RequestParam(value = "type", required = false) String type,
-                                      @RequestParam("file") MultipartFile file,
+                                      @RequestParam("upload") MultipartFile file,
                                       @RequestParam(value = "isAuction", defaultValue = "false") boolean isAuction,
                                       @RequestParam(value = "auctionDuration", required = false) AuctionDuration auctionDuration,
                                       @RequestParam(value = "auctionStartingBid", required = false) Double auctionStartingBid,
