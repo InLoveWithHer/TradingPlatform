@@ -50,6 +50,9 @@ public class Advertisement {
     @Column
     private String type;
 
+    @Column
+    private Boolean isActive = true;
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "createdAt", updatable = false)
