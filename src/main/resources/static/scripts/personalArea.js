@@ -15,9 +15,6 @@ $(document).on('click', '#saveUser', function() {
   });
 });
 
-//$('.modal').on('click', function(event) {
-//    if ($(event.target).hasClass('modal')) {
-//        event.stopPropagation();
-//    }
-//});
+
+
 

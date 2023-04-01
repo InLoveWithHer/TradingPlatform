@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Sign-in</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <link rel="stylesheet" th:href="@{/styles/signPage.css}">
+</head>
+<body>
+<header th:insert="~{blocks/header :: header}"></header>
+
+<main>
+  <form action="/namePhone" method="post">
+    <h1 class="h3 mb-3 fw-normal">Будь ласка, введіть ім'я та номер телефону</h1>
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="name" name="name" placeholder="Vadim">
+      <label for="name">Ім'я</label>
+    </div>
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="phone" name="phone" placeholder="+380967447975">
+      <label for="phone">Номер телефону</label>
+    </div>
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Продовжити</button>
+  </form>
+</main>
+</body>
+</html>

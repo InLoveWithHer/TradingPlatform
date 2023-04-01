@@ -2,10 +2,7 @@ package com.example.tradingplatform.controller;
 
 import com.example.tradingplatform.entity.Advertisement;
 import com.example.tradingplatform.entity.User;
-import com.example.tradingplatform.reposiroty.AdvertisementsRepository;
-import com.example.tradingplatform.service.AdvertisementService;
 import com.example.tradingplatform.service.UserService;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,10 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-
-import java.util.Objects;
 
 @Controller
 public class PersonalAreaController {
@@ -38,7 +31,7 @@ public class PersonalAreaController {
 
         String name = user.getName();
         if (name == null) {
-            model.addAttribute("showModal", true);
+            return "namePhoneForm";
         } else {
             model.addAttribute("showModal", false);
         }
@@ -51,7 +44,7 @@ public class PersonalAreaController {
         return "personal-area";
     }
 
-    @PostMapping("/save-user")
+    @PostMapping("/namePhone")
     @ResponseBody
     public String saveUserNameAndPhone(@RequestParam String name, @RequestParam String phone) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -63,7 +56,7 @@ public class PersonalAreaController {
         user.setName(name);
         user.setPhone(phone);
         userService.saveUser(user);
-        return "success";
+        return "personal-area";
     }
 
 

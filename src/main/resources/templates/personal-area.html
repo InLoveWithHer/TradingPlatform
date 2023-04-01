@@ -9,21 +9,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
     <script src="/static/scripts/personalArea.js"></script>
-    <script>
-        $(document).ready(function() {
-            console.log('Page loaded');
-            var showModal = [[${showModal}]];
-            console.log('showModal:', showModal);
-            if (showModal) {
-                console.log('Showing modal...');
-                $('#modalNamePhone').modal('show');
-            }
-        });
-    </script>
 </head>
 <body>
-<div th:insert="~{blocks/modalNamePhone :: modalNamePhone}"></div>
-
 <header th:insert="~{blocks/header :: header}"></header>
 
 <div class="container">
