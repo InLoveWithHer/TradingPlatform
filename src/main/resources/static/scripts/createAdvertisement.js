@@ -67,15 +67,20 @@ $(document).ready(function() {
 });
 
 function getName(str) {
-    if (str.lastIndexOf('\\')) {
-        var i = str.lastIndexOf('\\') + 1;
-    } else {
-        var i = str.lastIndexOf('/') + 1;
-    }
-    var filename = str.slice(i);
-    var uploaded = document.getElementById("fileFormLabel");
-    uploaded.innerHTML = filename;
+  if (str.lastIndexOf('\\')) {
+    var i = str.lastIndexOf('\\') + 1;
+  } else {
+    var i = str.lastIndexOf('/') + 1;
+  }
+  var filename = str.slice(i);
+  var maxLength = 13; // Максимальная длина имени файла
+  if (filename.length > maxLength) {
+    filename = filename.slice(0, maxLength) + '...'; // Обрезаем имя файла и добавляем многоточие в конце
+  }
+  var uploaded = document.getElementById("fileFormLabel");
+  uploaded.innerHTML = filename;
 }
+
 
 
 

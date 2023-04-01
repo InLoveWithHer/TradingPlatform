@@ -32,13 +32,13 @@
                                  th:src="@{/images/__${advertisement.photoUrl}__}"/>
                             <div class="card-body" style="min-height: 207px;">
                                 <a th:href="@{'/advertisement/' + ${advertisement.id}}">
-                                    <p class="card-text" th:text="${advertisement.title}"/>
+                                    <p class="card-text" th:text="${advertisement.title}"></p>
                                 </a>
-                                <p class="card-text" th:text="'Price:' + ${advertisement.price} + ' грн'"/>
+                                <p class="card-text" th:text="'Price:' + ${advertisement.price} + ' грн'"></p>
                                 <p class="card-text" th:if="${advertisement.status}"
-                                   th:text="'Status: ' + ${advertisement.status}"/>
-                                <p class="card-text" th:text="'Category: ' + ${advertisement.categoryName}"/>
-                                <p class="card-text" th:text="'Subcategory: ' + ${advertisement.subcategoryName}"/>
+                                   th:text="'Status: ' + ${advertisement.status}"></p>
+                                <p class="card-text" th:text="'Category: ' + ${advertisement.categoryName}"></p>
+                                <p class="card-text" th:text="'Subcategory: ' + ${advertisement.subcategoryName}"></p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-sm btn-outline-secondary">Buy</button>

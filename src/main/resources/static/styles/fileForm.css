@@ -1,0 +1,53 @@
+.fileForm {
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 8px;
+    min-height: 42px;
+    overflow: hidden;
+    position: relative;
+    text-align: left;
+    vertical-align: middle;
+    max-width: 250px;
+}
+
+.fileForm .selectButton {
+    background-color: #A2A3A3;
+    border: 1px solid #939494;
+    border-radius: 6px;
+    float: left;
+    font-size: 16px;
+    min-height: 42px;
+    overflow: hidden;
+    padding: 7px 6px;
+    text-align: center;
+    vertical-align: middle;
+    max-width: 129px;
+}
+
+.fileForm #upload{
+    position:absolute;
+    top:0;
+    left:0;
+    max-width: 112px;
+    -moz-opacity: 0;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    font-size: 150px;
+    height: 42px;
+    z-index:20;
+}
+
+.fileForm #fileFormLabel {
+    background-color: #FFFFFF;
+    float: right;
+    min-height: 42px;
+    overflow: hidden;
+    padding: 7px;
+    text-align: left;
+    vertical-align: middle;
+    min-width: 138px;
+}
+
+.selectButton:hover {
+    cursor: pointer;
+}

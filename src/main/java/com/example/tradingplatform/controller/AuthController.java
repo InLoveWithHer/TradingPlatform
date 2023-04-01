@@ -23,21 +23,6 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @GetMapping("/personal-area")
-    @PreAuthorize("isAuthenticated()")
-    public String personalArea(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        User user = userService.getByEmail(email);
-        if (user == null) {
-            return "redirect:/login";
-        }
-        model.addAttribute("user", user);
-        return "personal-area";
-    }
-
-
-
     @GetMapping("/login")
     public String loginPage() {
         return "sign-in";
@@ -50,8 +35,6 @@ public class AuthController {
         }
         return "redirect:/personal-area";
     }
-
-
 
     @GetMapping("/register")
     public String registrationPage() {

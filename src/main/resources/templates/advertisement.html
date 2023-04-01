@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title th:text="${advertisement.title}"></title>
@@ -11,7 +11,7 @@
 <div>
     <h1 th:text="${advertisement.title}"></h1>
     <p th:text="${#dates.format(advertisement.createdAt, 'dd/MM/yyyy')}"></p>
-    <img th:src="@{/images/__${advertisement.photoUrl}__}" alt="Advertisement Image">
+    <img th:src="@{/images/__${advertisement.photoUrl}__}" alt="Advertisement Image" >
     <p th:text="${advertisement.description}"></p>
     <p th:if="${advertisement.price != null}" th:text="'Price: ' + ${advertisement.price}"></p>
     <p th:if="${advertisement.status != null}" th:text="'Status: ' + ${advertisement.status}"></p>

@@ -22,21 +22,16 @@ import java.util.Optional;
 public class AdvertisementService {
 
     private final AdvertisementsRepository advertisementRepository;
-    private final AuctionRepository auctionRepository;
     private final CategoryRepository categoryRepository;
     private final SubcategoryRepository subcategoryRepository;
-    private final UserService userService;
     private final AuctionService auctionService;
-
     private final UsersRepository usersRepository;
 
     @Autowired
     public AdvertisementService(AdvertisementsRepository advertisementRepository, AuctionRepository auctionRepository, CategoryRepository categoryRepository, SubcategoryRepository subcategoryRepository, UserService userService, AuctionService auctionService, UsersRepository usersRepository) {
         this.advertisementRepository = advertisementRepository;
-        this.auctionRepository = auctionRepository;
         this.categoryRepository = categoryRepository;
         this.subcategoryRepository = subcategoryRepository;
-        this.userService = userService;
         this.auctionService = auctionService;
         this.usersRepository = usersRepository;
     }

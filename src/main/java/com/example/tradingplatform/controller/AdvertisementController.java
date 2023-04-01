@@ -14,27 +14,24 @@ import com.example.tradingplatform.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
 public class AdvertisementController {
-
     private final AdvertisementService advertisementService;
     private final CategoryRepository categoryRepository;
     private final SubcategoryRepository subcategoryRepository;
@@ -66,7 +63,11 @@ public class AdvertisementController {
     @GetMapping("/advertisement/{id}")
     public String showAdvertisement(@PathVariable("id") Long id, Model model) {
         Advertisement advertisement = advertisementService.getAdvertisementById(id);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        User user = userService.getByEmail(email);
         model.addAttribute("advertisement", advertisement);
+        model.addAttribute("user", user);
         return "advertisement";
     }
 

@@ -13,4 +13,5 @@ public interface AdvertisementsRepository extends JpaRepository<Advertisement, L
     List<Advertisement> findByUserId(Long userId);
     List<Advertisement> findTop9ByOrderByCreatedAtDesc();
     Page<Advertisement> findByTitleContainingIgnoreCase(String searchTerm, Pageable pageable);
+    Page<Advertisement> findAllByUserId(Long userId, Pageable pageable);
 }

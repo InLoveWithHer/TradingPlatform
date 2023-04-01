@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <title>Home page</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -25,16 +25,16 @@
                 <div class="col" th:each="advertisement : ${advertisements}">
                     <div class="card shadow-sm">
                         <img class="bd-placeholder-img card-img-top" width="100%" height="300"
-                             th:src="@{/images/__${advertisement.photoUrl}__}"/>
+                             th:src="@{/images/__${advertisement.photoUrl}__}" alt=""/>
                         <div class="card-body" style="min-height: 207px;">
                             <a th:href="@{'/advertisement/' + ${advertisement.id}}">
-                                <p class="card-text" th:text="${advertisement.title}"/>
+                                <p class="card-text" th:text="${advertisement.title}"></p>
                             </a>
-                            <p class="card-text" th:text="'Price:' + ${advertisement.price} + ' грн'"/>
+                            <p class="card-text" th:text="'Price:' + ${advertisement.price} + ' грн'"></p>
                             <p class="card-text" th:if="${advertisement.status}"
-                               th:text="'Status: ' + ${advertisement.status}"/>
-                            <p class="card-text" th:text="'Category: ' + ${advertisement.categoryName}"/>
-                            <p class="card-text" th:text="'Subcategory: ' + ${advertisement.subcategoryName}"/>
+                               th:text="'Status: ' + ${advertisement.status}"></p>
+                            <p class="card-text" th:text="'Category: ' + ${advertisement.categoryName}"></p>
+                            <p class="card-text" th:text="'Subcategory: ' + ${advertisement.subcategoryName}"></p>
 
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
@@ -49,7 +49,6 @@
             </div>
         </div>
     </div>
-
     <div class="pagination">
         <ul>
             <li th:unless="${currentPage == 0}">
@@ -64,7 +63,6 @@
             </li>
         </ul>
     </div>
-
 </main>
 
 <footer th:insert="~{blocks/footer :: footer}"></footer>
