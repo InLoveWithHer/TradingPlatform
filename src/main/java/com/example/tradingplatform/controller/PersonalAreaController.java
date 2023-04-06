@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class PersonalAreaController {
@@ -31,7 +32,7 @@ public class PersonalAreaController {
 
         String name = user.getName();
         if (name == null) {
-            return "namePhoneForm";
+            return "redirect:/namePhone";
         } else {
             model.addAttribute("showModal", false);
         }
@@ -44,20 +45,26 @@ public class PersonalAreaController {
         return "personal-area";
     }
 
+    @GetMapping("/namePhone")
+    @PreAuthorize("isAuthenticated()")
+    public String userNameAndPhone() {
+        return "namePhoneForm";
+    }
+
     @PostMapping("/namePhone")
-    @ResponseBody
-    public String saveUserNameAndPhone(@RequestParam String name, @RequestParam String phone) {
+    public ModelAndView saveUserNameAndPhone(@RequestParam String name, @RequestParam String phone) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         User user = userService.getByEmail(email);
         if (user == null) {
-            return "error";
+            return new ModelAndView("error");
         }
         user.setName(name);
         user.setPhone(phone);
         userService.saveUser(user);
-        return "personal-area";
+        return new ModelAndView("redirect:/personal-area");
     }
+
 
 
 
