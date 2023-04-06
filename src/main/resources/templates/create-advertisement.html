@@ -18,7 +18,7 @@
                 <div class="col-md-3 offset-md-3">
                     <div class="form-group mb-2" style="max-width: 250px;">
                         <label for="title"><span class="required">*</span>Заголовок:</label>
-                        <input type="text" class="form-control mt-1" id="title" name="title" required>
+                        <input type="text" class="form-control mt-1" id="title" name="title" required onkeyup="capitalizeFirstLetter(this)">
                     </div>
                     <div class="form-group mb-2" style="max-width: 250px;">
                         <label for="price">Ціна:</label>
@@ -43,21 +43,21 @@
                         <label for="status">Статус:</label>
                         <select class="form-control mt-1" id="status" name="status">
                             <option value=""></option>
-                            <option value="new">New</option>
-                            <option value="used">Used</option>
+                            <option value="Нове">Нове</option>
+                            <option value="Б/У">Б/У</option>
                         </select>
                     </div>
                     <div class="form-group mb-2" style="max-width: 250px;">
                         <label for="description"><span class="required">*</span>Опис:</label>
                         <textarea class="form-control mt-1" id="description" name="description" rows="3"
-                                  required></textarea>
+                                  required onkeyup="capitalizeFirstLetter(this)"></textarea>
                     </div>
-                    <div class="form-group mb-2" style="max-width: 250px;">
+                    <div class="form-group mb-3" style="max-width: 250px;">
                         <label for="type">Тип:</label>
                         <select class="form-control mt-1" id="type" name="type">
                             <option value=""></option>
-                            <option value="free">Free</option>
-                            <option value="price_negotiable">Price Negotiable</option>
+                            <option value="Безкоштовно">Безкоштовно</option>
+                            <option value="Ціна договірна">Ціна договірна</option>
                         </select>
                     </div>
                     <div class="fileForm">
@@ -75,10 +75,10 @@
                     <div class="form-group mb-2" style="max-width: 250px;">
                         <label for="auctionDuration">Тривалість аукціону:</label>
                         <select class="form-control mt-1" id="auctionDuration" name="auctionDuration" disabled>
-                            <option value="ONE_DAY">1 day</option>
-                            <option value="FIVE_DAYS">5 days</option>
-                            <option value="TEN_DAYS">10 days</option>
-                            <option value="TWENTY_DAYS">20 days</option>
+                            <option value="ONE_DAY">1 день</option>
+                            <option value="FIVE_DAYS">5 днів</option>
+                            <option value="TEN_DAYS">10 днів</option>
+                            <option value="TWENTY_DAYS">20 днів</option>
                         </select>
                     </div>
                     <div class="form-group mb-2" style="max-width: 250px;">

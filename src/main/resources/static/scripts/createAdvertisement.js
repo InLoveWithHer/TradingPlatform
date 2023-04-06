@@ -81,6 +81,16 @@ function getName(str) {
   uploaded.innerHTML = filename;
 }
 
+function capitalizeFirstLetter(input) {
+  var value = input.value;
+  if (value.length > 0) {
+    var firstChar = value.charAt(0);
+    if (firstChar.toLowerCase() === firstChar) {
+      input.value = firstChar.toUpperCase() + value.slice(1);
+    }
+  }
+}
+
 
 
 
