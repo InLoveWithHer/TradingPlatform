@@ -75,4 +75,8 @@ public class UserService {
         return usersRepository.save(existingUser);
     }
 
+    public boolean isEmailExists(String email) {
+        return usersRepository.existsByEmail(email);
+    }
+
 }

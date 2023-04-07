@@ -32,10 +32,12 @@ $(document).ready(function() {
             $('#price').val('').prop('disabled', true);
             $('#auctionDuration').prop('disabled', false);
             $('#auctionStartingBid').prop('disabled', false);
+            $('#type').prop('selectedIndex', -1).prop('disabled', true);
         } else {
             $('#price').prop('disabled', false);
             $('#auctionDuration').prop('disabled', true);
             $('#auctionStartingBid').val('').prop('disabled', true);
+            $('#type').prop('selectedIndex', -1).prop('disabled', false);
         }
     });
 });

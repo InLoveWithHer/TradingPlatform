@@ -11,8 +11,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class AuthController {
@@ -52,6 +55,16 @@ public class AuthController {
         session.removeAttribute("user");
         return "redirect:/login";
     }
+
+    @PostMapping("/checkEmail")
+    @ResponseBody
+    public Map<String, Boolean> checkEmailExists(@RequestParam String email) {
+        boolean isEmailExists = userService.isEmailExists(email);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("isEmailExists", isEmailExists);
+        return response;
+    }
+
 
     private static class LoginForm {
         public String email;
