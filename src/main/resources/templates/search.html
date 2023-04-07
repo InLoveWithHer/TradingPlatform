@@ -54,7 +54,7 @@
         </div>
     </th:block>
 </div>
-<div class="pagination">
+<div th:if="${advertisements.size() > 9}" class="pagination">
     <ul>
         <li th:unless="${currentPage == 0}">
             <a th:href="@{/search(search=${pageTitle}, page=${currentPage - 1})}">&laquo;</a>
