@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -45,6 +46,7 @@ public class Advertisement {
     private String photoUrl;
 
     @Column
+    @Length(max = 1500)
     private String description;
 
     @Column
