@@ -33,16 +33,12 @@ import java.util.stream.Collectors;
 @Controller
 public class AdvertisementController {
     private final AdvertisementService advertisementService;
-    private final CategoryRepository categoryRepository;
-    private final SubcategoryRepository subcategoryRepository;
     private final UserService userService;
     private final CategoryService categoryService;
     private final SubcategoryService subcategoryService;
 
-    public AdvertisementController(AdvertisementService advertisementService, CategoryRepository categoryRepository, SubcategoryRepository subcategoryRepository, UserService userService, CategoryService categoryService, SubcategoryService subcategoryService) {
+    public AdvertisementController(AdvertisementService advertisementService, UserService userService, CategoryService categoryService, SubcategoryService subcategoryService) {
         this.advertisementService = advertisementService;
-        this.categoryRepository = categoryRepository;
-        this.subcategoryRepository = subcategoryRepository;
         this.userService = userService;
         this.categoryService = categoryService;
         this.subcategoryService = subcategoryService;
@@ -99,7 +95,7 @@ public class AdvertisementController {
 
     @GetMapping("/createAdvertisements")
     public String createAdvertisementForm(Model model) {
-        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("categories", categoryService.getAllCategories());
         return "create-advertisement";
     }
 
@@ -130,12 +126,12 @@ public class AdvertisementController {
                                       @RequestParam(value = "auctionStartingBid", required = false) Double auctionStartingBid,
                                       RedirectAttributes redirectAttributes) throws IOException {
 
-        Category category = categoryRepository.findByName(categoryName);
+        Category category = categoryService.getCategoryByName(categoryName);
         if (category == null) {
             return "redirect:/";
         }
 
-        Subcategory subcategory = subcategoryRepository.findByName(subcategoryName);
+        Subcategory subcategory = subcategoryService.getSubcategoryByName(subcategoryName);
         if (subcategory == null) {
             return "redirect:/";
         }

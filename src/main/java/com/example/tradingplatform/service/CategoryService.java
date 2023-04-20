@@ -5,6 +5,7 @@ import com.example.tradingplatform.reposiroty.CategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CategoryService {
@@ -25,4 +26,9 @@ public class CategoryService {
     public Category getCategoryByName(String categoryName) {
         return categoryRepository.findByName(categoryName);
     }
+
+    public List<Category> getAllCategories() {
+        return categoryRepository.findAll();
+    }
+
 }

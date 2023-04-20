@@ -33,4 +33,8 @@ public class SubcategoryService {
         return subcategoryRepository.findByCategory(category);
     }
 
+    public Subcategory getSubcategoryByName(String subcategoryName) {
+        return subcategoryRepository.findByName(subcategoryName);
+    }
+
 }

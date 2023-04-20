@@ -19,13 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminPageController {
     public final CategoryService categoryService;
     public final SubcategoryService subcategoryService;
-    public final CategoryRepository categoryRepository;
 
-    public AdminPageController(CategoryService categoryService, SubcategoryService subcategoryService, CategoryRepository categoryRepository) {
+    public AdminPageController(CategoryService categoryService, SubcategoryService subcategoryService) {
 
         this.categoryService = categoryService;
         this.subcategoryService = subcategoryService;
-        this.categoryRepository = categoryRepository;
     }
 
     @PostMapping("/createCategory")
