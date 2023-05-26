@@ -15,6 +15,15 @@
             background-color: #f1f1f1;
         }
     </style>
+    <script>
+        window.addEventListener('load', function() {
+          var titleElement = document.querySelector('.card-text');
+          var titleText = titleElement.innerText;
+          if (titleText.length > 40) {
+            titleElement.innerText = titleText.substring(0, 40) + '...';
+          }
+        });
+    </script>
 </head>
 <body>
 <header th:insert="~{blocks/header :: header}"></header>
@@ -23,7 +32,7 @@
     <section class="py-5 text-center container">
         <div class="row py-lg-5">
             <div class="col-lg-6 col-md-8 mx-auto">
-                <h1 class="fw-light">Album example</h1>
+                <h1 class="fw-light">Всі оголошення</h1>
             </div>
         </div>
     </section>

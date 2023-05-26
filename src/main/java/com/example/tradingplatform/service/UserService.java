@@ -19,7 +19,6 @@ import java.util.Optional;
 public class UserService {
     private final UsersRepository usersRepository;
     private final PasswordEncoder passwordEncoder;
-
     private final AdvertisementsRepository advertisementRepository;
 
     public UserService(UsersRepository usersRepository, PasswordEncoder passwordEncoder, AdvertisementsRepository advertisementRepository) {
@@ -77,6 +76,16 @@ public class UserService {
 
     public boolean isEmailExists(String email) {
         return usersRepository.existsByEmail(email);
+    }
+
+    public Long getUserIdByEmail(String email) {
+        Optional<User> userOptional = usersRepository.findByEmail(email);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            return user.getId();
+        } else {
+            return null; // Возвращаем null, если пользователь не найден
+        }
     }
 
 }

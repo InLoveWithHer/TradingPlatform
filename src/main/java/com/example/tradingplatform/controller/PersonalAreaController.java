@@ -65,7 +65,4 @@ public class PersonalAreaController {
         return new ModelAndView("redirect:/personal-area");
     }
 
-
-
-
 }

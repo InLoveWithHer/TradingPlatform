@@ -2,11 +2,7 @@ package com.example.tradingplatform.controller;
 
 import com.example.tradingplatform.entity.User;
 import com.example.tradingplatform.service.UserService;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -64,7 +60,6 @@ public class AuthController {
         response.put("isEmailExists", isEmailExists);
         return response;
     }
-
 
     private static class LoginForm {
         public String email;

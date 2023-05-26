@@ -5,8 +5,6 @@ import com.example.tradingplatform.entity.Category;
 import com.example.tradingplatform.entity.Subcategory;
 import com.example.tradingplatform.entity.User;
 import com.example.tradingplatform.reposiroty.AuctionDuration;
-import com.example.tradingplatform.reposiroty.CategoryRepository;
-import com.example.tradingplatform.reposiroty.SubcategoryRepository;
 import com.example.tradingplatform.service.AdvertisementService;
 import com.example.tradingplatform.service.CategoryService;
 import com.example.tradingplatform.service.SubcategoryService;

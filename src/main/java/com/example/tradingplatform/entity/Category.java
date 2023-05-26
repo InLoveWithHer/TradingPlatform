@@ -1,5 +1,6 @@
 package com.example.tradingplatform.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ public class Category {
     @Column
     private String name;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer"})
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Subcategory> subcategories;
 

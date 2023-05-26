@@ -30,19 +30,29 @@
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 <div class="col" th:each="advertisement : ${advertisements}">
                     <div class="card shadow-sm">
-                        <img class="bd-placeholder-img card-img-top" width="100%" height="300"
-                             th:src="@{/images/__${advertisement.photoUrl}__}" alt=""/>
-                        <div class="card-body" style="min-height: 207px;">
-                            <a th:href="@{'/advertisement/' + ${advertisement.id}}">
-                                <p class="card-text" th:text="${advertisement.title}"></p>
-                            </a>
-                            <p class="card-text" th:text="'Price:' + ${advertisement.price} + ' грн'"></p>
-                            <p class="card-text" th:if="${advertisement.status}"
-                               th:text="'Status: ' + ${advertisement.status}"></p>
-                            <p class="card-text" th:text="'Category: ' + ${advertisement.categoryName}"></p>
-                            <p class="card-text" th:text="'Subcategory: ' + ${advertisement.subcategoryName}"></p>
-
+                        <a th:href="@{'/advertisement/' + ${advertisement.id}}" style="display:inline-block; text-decoration:none;">
+                            <img class="bd-placeholder-img card-img-top" width="100%" height="300"
+                                 th:src="@{/images/__${advertisement.photoUrl}__}" alt=""/>
+                        </a>
+                        <div class="card-body" style="min-height: auto;">
+                            <div class="text-center">
+                                <a th:href="@{'/advertisement/' + ${advertisement.id}}" style="display:inline-block; text-decoration:none;">
+                                    <p class="card-text" th:text="${advertisement.title}"></p>
+                                </a>
+                            </div>
+                            <div>
+                                <p class="card-text text-end" th:text="${advertisement.price} + ' грн'"></p>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <p class="card-text" th:if="${advertisement.status}"
+                                   th:text="${advertisement.status}"></p>
+                                <p class="card-text" th:if="${advertisement.type}"
+                                   th:text="${advertisement.type}"></p>
+                            </div>
                             <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary">Придбати</button>
+                                </div>
                                 <p class="card-text"
                                    th:text="${#dates.format(advertisement.createdAt, 'dd/MM/yyyy')}"></p>
                             </div>
