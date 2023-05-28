@@ -111,6 +111,7 @@
 
 .advertisement-info p {
   margin: 0;
+  color: #333;
 }
 
 .advertisement-info .published-date {
@@ -120,15 +121,16 @@
 
 .advertisement-info .status-type {
   font-weight: bold;
+  font-size: 16px;
 }
 
 .advertisement-info .category-subcategory {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
 }
 
 .advertisement-info .price {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: bold;
 }
 
@@ -148,6 +150,9 @@
   padding: 8px 20px;
   border-radius: 4px;
   cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  font-size: 16px;
 }
 
 .advertisement-info .buy-button button:hover {
@@ -171,7 +176,7 @@
 }
 
 .author-info {
-  font-family: Arial, sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .author-info-title {
@@ -212,12 +217,34 @@
   font-size: 28px;
   font-weight: bold;
   margin-bottom: 20px;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .advertisement-description {
   font-size: 18px;
   line-height: 1.5;
   text-align: justify;
+  font-family: 'Montserrat', sans-serif;
+  overflow: auto;
+  max-height: 250px;
 }
+
+.countdown-container {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+
+
+
 
 

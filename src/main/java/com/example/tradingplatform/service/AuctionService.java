@@ -12,6 +12,7 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -58,13 +59,15 @@ public class AuctionService {
         return bidRepository.save(bid);
     }
 
-    public List<Bid> getBids(Long advertisementId) throws ChangeSetPersister.NotFoundException {
-        Advertisement advertisement = advertisementsRepository.findById(advertisementId)
-                .orElseThrow(ChangeSetPersister.NotFoundException::new);
+    public List<Bid> getBids(Long advertisementId) {
+        Advertisement advertisement = advertisementsRepository.findById(advertisementId).orElse(null);
 
-        Auction auction = advertisement.getAuction();
-
-        return auction.getBids();
+        if (advertisement != null && advertisement.getAuction() != null) {
+            Auction auction = advertisement.getAuction();
+            return auction.getBids();
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     public String getUserNameByBidId(Long bidId) throws ChangeSetPersister.NotFoundException {

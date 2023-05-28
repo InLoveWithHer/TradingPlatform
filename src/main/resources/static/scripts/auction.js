@@ -6,6 +6,7 @@ $(document).ready(function() {
   var maxBid = 0; // Переменная для хранения максимальной ставки
   var currentUserID;
   var userId;
+  var endDate;
 
   userId = $('#userId').text();
   $('#userId').remove()
@@ -42,8 +43,11 @@ $(document).ready(function() {
       // Проверка наличия аукциона
       if (auction != null) {
         loadBids();
-        auctionID = auction.id
+        auctionID = auction.id;
+        endDate = new Date(auction.endDate);
+        startCountdown(endDate);
       }
+
     },
     error: function(jqXHR, textStatus, errorThrown) {
       // Обработка ошибки
@@ -227,4 +231,41 @@ $(document).ready(function() {
     $('#alert-message').text(message);
     $('#custom-alert').modal('show');
   }
+
+  function startCountdown(endDate) {
+    var countdownElement = document.getElementById('countdown');
+
+    // Функция для обновления отображения обратного отсчета
+    function updateCountdown() {
+      var now = new Date(); // Текущая дата и время
+      var distance = endDate - now; // Разница между датами в миллисекундах
+
+      // Проверяем, сколько времени осталось до окончания аукциона
+      if (distance < 0) {
+        countdownElement.textContent = 'Аукціон завершено';
+      } else {
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Форматируем отображение времени
+        var formattedTime = '';
+        if (days > 0) {
+          formattedTime += days + ' днів ';
+        }
+        formattedTime += hours.toString().padStart(2, '0') + ':' +
+          minutes.toString().padStart(2, '0') + ':' +
+          seconds.toString().padStart(2, '0');
+
+        if(auctionID != null) {
+            countdownElement.textContent = 'Аукціон закривається через ' + formattedTime;
+        }
+      }
+    }
+
+    // Запускаем обновление отображения обратного отсчета каждую секунду
+    setInterval(updateCountdown, 1000);
+  }
+
 });

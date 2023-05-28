@@ -39,8 +39,13 @@ public class AuctionController {
     @GetMapping("advertisement/{advertisementId}/auction/bids")
     public ResponseEntity<List<Bid>> getBids(@PathVariable Long advertisementId) throws ChangeSetPersister.NotFoundException {
         List<Bid> bids = auctionService.getBids(advertisementId);
-        return ResponseEntity.ok(bids);
+        if (bids != null) {
+            return ResponseEntity.ok(bids);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
+
 
     @GetMapping("/bid/{bidId}/user/name")
     public ResponseEntity<String> getUserNameByBidId(@PathVariable Long bidId) {
@@ -57,9 +62,8 @@ public class AuctionController {
         Auction auction = auctionService.getAuctionByAdvertisementId(advertisementId);
         if (auction != null) {
             return ResponseEntity.ok(auction);
-        } else {
-            return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/user/{userId}/auction/{auctionId}/maxBid")

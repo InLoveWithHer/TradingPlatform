@@ -76,24 +76,32 @@
     <div style="max-width: 1400px; margin: auto; margin-top: 15px; height: auto; display: flex;">
         <div class="advertisement-info">
             <div>
-                <p class="published-date" id="published-date"></p>
+                <div>
+                    <p class="published-date" id="published-date"></p>
+                </div>
+                <div class="d-flex justify-content-between align-items-center" th:if="${advertisement.status != null || advertisement.type != null}">
+                    <p class="status-type" th:if="${advertisement.status != null}" th:text="${advertisement.status}"></p>
+                    <p class="status-type" th:if="${advertisement.type != null}" th:text="${advertisement.type}"></p>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <p class="category-subcategory" th:text="${advertisement.category.name}"></p>
+                    <p class="category-subcategory" th:text="${advertisement.subcategory.name}"></p>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <p class="price" th:if="${advertisement.price != null}" th:text="${advertisement.price} + ' грн'"></p>
+                    <p class="starting-bid" th:if="${advertisement.auction != null}">Початкова ціна: <span th:id="starting-bid" th:text="${advertisement.auction.startingBid}"></span> грн</p>
+                    <div class="buy-button">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Придбати</button>
+                    </div>
+                </div>
             </div>
-            <div class="d-flex justify-content-between align-items-center" th:if="${advertisement.status != null || advertisement.type != null}">
-                <p class="status-type" th:if="${advertisement.status != null}" th:text="${advertisement.status}"></p>
-                <p class="status-type" th:if="${advertisement.type != null}" th:text="${advertisement.type}"></p>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="category-subcategory" th:text="${advertisement.category.name}"></p>
-                <p class="category-subcategory" th:text="${advertisement.subcategory.name}"></p>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-                <p class="price" th:if="${advertisement.price != null}" th:text="${advertisement.price} + ' грн'"></p>
-                <p class="starting-bid" th:if="${advertisement.auction != null}">Початкова ціна: <span th:id="starting-bid" th:text="${advertisement.auction.startingBid}"></span> грн</p>
-                <div class="buy-button">
-                    <button type="button" class="btn btn-sm btn-outline-secondary">Придбати</button>
+            <div class="countdown-container" th:if="${advertisement.auction != null}">
+                <div>
+                    <p id="countdown"></p>
                 </div>
             </div>
         </div>
+
         <div th:if="${advertisement.auction != null}" class="auction-section">
             <div class="bids-section">
                 <h4 class="montserrat-font">Останні ставки</h4>
@@ -110,6 +118,7 @@
             </div>
         </div>
     </div>
+
 </div>
 
 
