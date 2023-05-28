@@ -22,12 +22,6 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-
-    @PutMapping("/users/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User user) {
-        return userService.updateUser(id, user);
-    }
-
     @GetMapping("/users/{id}")
     public ResponseEntity<User> getUserById(@PathVariable(value = "id") Long id) {
         User user = userService.getUserById(id);

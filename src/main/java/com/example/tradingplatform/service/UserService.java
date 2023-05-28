@@ -59,19 +59,17 @@ public class UserService {
         }
     }
 
+    public void passwordEncode(User user, String password) {
+        String encryptedPassword = passwordEncoder.encode(password);
+        user.setPassword(encryptedPassword);
+    }
+
     public void deleteUserById(Long id) {
         usersRepository.deleteById(id);
     }
 
-    public User updateUser(Long id, User user) {
-        User existingUser = usersRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User with given id does not exist"));
-
-        existingUser.setName(user.getName());
-        existingUser.setEmail(user.getEmail());
-        existingUser.setPassword(user.getPassword());
-
-        return usersRepository.save(existingUser);
+    public void updateUser(User user) {
+        usersRepository.save(user);
     }
 
     public boolean isEmailExists(String email) {

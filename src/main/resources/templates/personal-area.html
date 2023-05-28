@@ -14,18 +14,19 @@
 <header th:insert="~{blocks/header :: header}"></header>
 
 <div class="container">
-    <h1 class="mt-2" style="text-align: center;">Особистий кабінет користувача</h1>
+    <h1 class="mt-2 text-center" style="color: #333;">Особистий кабінет користувача</h1>
     <div class="row mb-5 mt-2">
         <div class="col-md-12 text-center">
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-primary me-2">Активні оголошення</button>
-                <button type="button" class="btn btn-primary me-2">Неактивні оголошення</button>
-                <button type="button" class="btn btn-primary me-2">Мої замовлення</button>
-                <button type="button" class="btn btn-primary">Редагувати особисті дані</button>
+                <a href="/personal-area/activeAdvertisements" class="btn btn-light rounded-pill mx-2" style="color: #333; background-color: #EDEDED; text-decoration: none;">Активні оголошення</a>
+                <a href="/personal-area/inactiveAdvertisements" class="btn btn-light rounded-pill mx-2" style="color: #333; background-color: #EDEDED; text-decoration: none;">Неактивні оголошення</a>
+                <a href="/personal-area/allOrders" class="btn btn-light rounded-pill mx-2" style="color: #333; background-color: #EDEDED; text-decoration: none;">Мої замовлення</a>
+                <a href="/personal-area/personalData/editing" class="btn btn-light rounded-pill mx-2" style="color: #333; background-color: #EDEDED; text-decoration: none;">Редагувати особисті дані</a>
             </div>
         </div>
     </div>
-    <div class="album py-5 bg-light">
+
+    <div class="album py-5 bg-light" th:if="${advertisements.size() > 0}">
         <div class="container">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 <div class="col" th:each="advertisement : ${advertisements}">

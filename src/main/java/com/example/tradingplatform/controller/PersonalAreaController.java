@@ -65,4 +65,51 @@ public class PersonalAreaController {
         return new ModelAndView("redirect:/personal-area");
     }
 
+    @GetMapping("/personal-area/personalData/editing")
+    @PreAuthorize("isAuthenticated()")
+    public String personalDataEditing(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        User user = userService.getByEmail(userEmail);
+
+        model.addAttribute("user", user);
+
+        return "personalDataEditing";
+    }
+
+    @PostMapping("/personal-area/personalData/editing")
+    public String editUser(@RequestParam(value = "name", required = false, defaultValue = "") String name,
+                           @RequestParam(value = "surname", required = false, defaultValue = "") String surname,
+                           @RequestParam(value = "patronymic", required = false, defaultValue = "") String patronymic,
+                           @RequestParam(value = "phone", required = false, defaultValue = "") String phone,
+                           @RequestParam(value = "email", required = false, defaultValue = "") String email,
+                           @RequestParam(value = "password", required = false, defaultValue = "") String password) {
+        // Обновите только те поля, которые были заполнены
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        User user = userService.getByEmail(userEmail);
+
+        if (!name.isEmpty()) {
+            user.setName(name);
+        }
+        if (!surname.isEmpty()) {
+            user.setSurname(surname);
+        }
+        if (!patronymic.isEmpty()) {
+            user.setPatronymic(patronymic);
+        }
+        if (!phone.isEmpty()) {
+            user.setPhone(phone);
+        }
+        if (!email.isEmpty()) {
+            user.setEmail(email);
+        }
+        if (!password.isEmpty()) {
+            userService.passwordEncode(user, password);
+        }
+
+        userService.updateUser(user);
+        return "redirect:/personal-area";
+    }
+
 }

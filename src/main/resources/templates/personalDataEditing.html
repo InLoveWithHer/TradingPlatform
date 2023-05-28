@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редагування персональних даних</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/styles/pagination.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+    <script src="/static/scripts/personalDataEditing.js"></script>
+</head>
+<body>
+<header th:insert="~{blocks/header :: header}"></header>
+
+<div class="container">
+    <h1 class="mt-4 mb-4">Редагування персональних даних</h1>
+    <form th:object="${user}" th:action="@{/personal-area/personalData/editing}" method="post" onsubmit="return validateForm()" id="form1">
+        <div class="mb-3">
+            <label for="name" class="form-label">Ім'я</label>
+            <input type="text" class="form-control" id="name" name="firstName" placeholder="Введіть ваше ім'я" th:value="${user.name}">
+        </div>
+        <div class="mb-3">
+            <label for="surname" class="form-label">Прізвище</label>
+            <input type="text" class="form-control" id="surname" name="surname" placeholder="Введіть ваше прізвище" th:value="${user.surname}">
+        </div>
+        <div class="mb-3">
+            <label for="patronymic" class="form-label">По батькові</label>
+            <input type="text" class="form-control" id="patronymic" name="patronymic" placeholder="Введіть по батькові" th:value="${user.patronymic}">
+        </div>
+        <div class="mb-3">
+            <label for="phone" class="form-label">Номер телефону</label>
+            <input type="text" class="form-control" id="phone" name="phone" placeholder="Введіть ваше номер телефону" th:value="${user.phone}">
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Введіть ваш email" required th:value="${user.email}">
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Пароль</label>
+            <div class="input-group">
+                <input type="password" class="form-control" id="password" name="password" placeholder="Введіть ваш пароль">
+                <button type="button" class="btn btn-outline-secondary" id="togglePassword1">Показати</button>
+            </div>
+        </div>
+
+        <div class="mb-3" th:classappend="${user.password != null and user.password != ''} ? '' : 'd-none'">
+            <label for="repeatPassword" class="form-label">Повтор пароля</label>
+            <div class="input-group">
+                <input type="password" class="form-control" id="repeatPassword" name="repeatPassword" placeholder="Введіть ваш пароль">
+                <button type="button" class="btn btn-outline-secondary" id="togglePassword2">Показати</button>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-secondary">Зберегти зміни</button>
+    </form>
+</div>
+
+<footer th:insert="~{blocks/footer :: footer}"></footer>
+</body>
+</html>
