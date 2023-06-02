@@ -19,18 +19,3 @@ function checkEmail() {
     }
 }
 
-//Перевірка валідності емайла
-//function validateEmail(email) {
-//     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-//     return re.test(email);
-//}
-//
-//const form = document.getElementById("registerForm");
-//const emailInput = document.getElementById("email");
-//
-//form.addEventListener("submit", function(event) {
-//     if (!validateEmail(emailInput.value)) {
-//         alert("Please enter a valid email address");
-//         event.preventDefault();
-//     }
-//});

@@ -65,8 +65,6 @@ public class AdvertisementController {
         return "advertisement";
     }
 
-
-
     @GetMapping("/search")
     public String search(@RequestParam("search") String searchTerm,
                          @RequestParam(defaultValue = "0") int page,
@@ -94,6 +92,14 @@ public class AdvertisementController {
     @GetMapping("/createAdvertisements")
     public String createAdvertisementForm(Model model) {
         model.addAttribute("categories", categoryService.getAllCategories());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        User user = userService.getByEmail(email);
+
+        if (user.getName() == null) {
+            return "redirect:/namePhone";
+        }
+
         return "create-advertisement";
     }
 
@@ -145,20 +151,56 @@ public class AdvertisementController {
     }
 
 
+    @PostMapping("/advertisement/{id}/activate")
+    public ResponseEntity<String> activateAdvertisement(@PathVariable("id") Long id) {
+        Advertisement advertisement = advertisementService.getAdvertisementById(id);
+
+        if (advertisement == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Изменить статус обьявления на активный
+        advertisement.setIsActive(true);
+        advertisementService.saveAdvertisement(advertisement);
+
+        return ResponseEntity.ok("Advertisement activated successfully");
+    }
+
+    @PostMapping("/advertisement/{id}/inactivate")
+    public ResponseEntity<String> inactivateAdvertisement(@PathVariable("id") Long id) {
+        Advertisement advertisement = advertisementService.getAdvertisementById(id);
+
+        if (advertisement == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Изменить статус обьявления на неактивный
+        advertisement.setIsActive(false);
+        advertisementService.saveAdvertisement(advertisement);
+
+        return ResponseEntity.ok("Advertisement activated successfully");
+    }
+
     @PutMapping("/advertisements/{id}")
     public Advertisement updateAdvertisement(@PathVariable Long id, @RequestBody Advertisement advertisementDetails) {
         return advertisementService.updateAdvertisement(id, advertisementDetails);
     }
 
-    @DeleteMapping("/advertisements/{id}")
-    public ResponseEntity<?> deleteAdvertisement(@PathVariable Long id) {
-        advertisementService.deleteAdvertisement(id);
-        return ResponseEntity.ok().build();
-    }
-
     @GetMapping("/user/advertisements/{userId}")
     public List<Advertisement> getAllAdvertisementsByUserId(@PathVariable Long userId) {
         return advertisementService.getAllAdvertisementsByUserId(userId);
+    }
+
+    @PostMapping("/advertisement/change-price")
+    public ResponseEntity<String> changePrice(@RequestParam("advertisementId") Long advertisementId, @RequestParam("newPrice") Double newPrice) {
+        advertisementService.changePrice(advertisementId, newPrice);
+        return ResponseEntity.ok("Price changed successfully");
+    }
+
+    @DeleteMapping("/advertisement/{advertisementId}/delete")
+    public ResponseEntity<?> deleteAdvertisement(@PathVariable Long advertisementId) {
+        advertisementService.deleteAdvertisement(advertisementId);
+        return ResponseEntity.ok().build();
     }
 
 }

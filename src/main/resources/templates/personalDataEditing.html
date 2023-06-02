@@ -34,20 +34,20 @@
         </div>
         <div class="mb-3">
             <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Введіть ваш email" required th:value="${user.email}">
+            <input type="email" class="form-control" id="email" name="email" placeholder="Введіть ваш email" minlength="3" th:value="${user.email}">
         </div>
         <div class="mb-3">
             <label for="password" class="form-label">Пароль</label>
             <div class="input-group">
-                <input type="password" class="form-control" id="password" name="password" placeholder="Введіть ваш пароль">
+                <input type="password" class="form-control" id="password" name="password" maxlength="15" minlength="5" placeholder="Введіть ваш пароль">
                 <button type="button" class="btn btn-outline-secondary" id="togglePassword1">Показати</button>
             </div>
         </div>
 
-        <div class="mb-3" th:classappend="${user.password != null and user.password != ''} ? '' : 'd-none'">
+        <div class="mb-3">
             <label for="repeatPassword" class="form-label">Повтор пароля</label>
             <div class="input-group">
-                <input type="password" class="form-control" id="repeatPassword" name="repeatPassword" placeholder="Введіть ваш пароль">
+                <input type="password" class="form-control" id="repeatPassword" name="repeatPassword" maxlength="15" minlength="5" placeholder="Введіть ваш пароль">
                 <button type="button" class="btn btn-outline-secondary" id="togglePassword2">Показати</button>
             </div>
         </div>

@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,14 +27,18 @@ public class AdvertisementService {
     private final SubcategoryRepository subcategoryRepository;
     private final AuctionService auctionService;
     private final UsersRepository usersRepository;
+    private final BidRepository bidRepository;
+    private final AuctionRepository auctionRepository;
 
     @Autowired
-    public AdvertisementService(AdvertisementsRepository advertisementRepository, AuctionRepository auctionRepository, CategoryRepository categoryRepository, SubcategoryRepository subcategoryRepository, UserService userService, AuctionService auctionService, UsersRepository usersRepository) {
+    public AdvertisementService(AdvertisementsRepository advertisementRepository, CategoryRepository categoryRepository, SubcategoryRepository subcategoryRepository, AuctionService auctionService, UsersRepository usersRepository, BidRepository bidRepository, AuctionRepository auctionRepository1) {
         this.advertisementRepository = advertisementRepository;
         this.categoryRepository = categoryRepository;
         this.subcategoryRepository = subcategoryRepository;
         this.auctionService = auctionService;
         this.usersRepository = usersRepository;
+        this.bidRepository = bidRepository;
+        this.auctionRepository = auctionRepository1;
     }
 
     public Page<Advertisement> findLatestAdvertisements(int pageNumber, int pageSize) {
@@ -101,14 +106,50 @@ public class AdvertisementService {
         return advertisementRepository.save(advertisement);
     }
 
-    public void deleteAdvertisement(Long id) {
-        Advertisement advertisement = advertisementRepository.findById(id)
-                .orElseThrow(() -> new ResNotFoundException("Advertisement not found with id " + id));
-        advertisementRepository.delete(advertisement);
-    }
-
     public List<Advertisement> getAllAdvertisementsByUserId(Long userId) {
         return advertisementRepository.findByUserId(userId);
     }
+
+    public void saveAdvertisement(Advertisement advertisement) {
+        advertisementRepository.save(advertisement);
+    }
+
+    public void changePrice(Long advertisementId, Double newPrice) {
+        Optional<Advertisement> advertisementOptional = advertisementRepository.findById(advertisementId);
+        if (advertisementOptional.isPresent()) {
+            Advertisement advertisement = advertisementOptional.get();
+            if (advertisement.getAuction() != null) {
+                throw new IllegalStateException("Cannot change price for an advertisement with an auction");
+            }
+            advertisement.setPrice(newPrice);
+            advertisementRepository.save(advertisement);
+        } else {
+            throw new IllegalArgumentException("Advertisement not found with ID: " + advertisementId);
+        }
+    }
+
+    public void deleteAdvertisement(Long advertisementId) {
+        Optional<Advertisement> advertisementOptional = advertisementRepository.findById(advertisementId);
+        if (advertisementOptional.isPresent()) {
+            Advertisement advertisement = advertisementOptional.get();
+
+            // Удаление связанного аукциона
+            Auction auction = advertisement.getAuction();
+            if (auction != null) {
+                // Удаление связанных ставок
+                List<Bid> bids = auction.getBids();
+                if (bids != null) {
+                    bidRepository.deleteAll(bids);
+                }
+
+                auctionRepository.delete(auction);
+            }
+
+            advertisementRepository.delete(advertisement);
+        } else {
+            throw new IllegalArgumentException("Advertisement not found with ID: " + advertisementId);
+        }
+    }
+
 
 }

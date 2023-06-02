@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -28,11 +30,11 @@ public class Auction {
     @Column
     private Double startingBid;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "advertisement_id")
     private Advertisement advertisement;
 
-    @OneToMany(mappedBy = "auction", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "auction", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Bid> bids;
 
     public void setEndDate(Date endDate) {

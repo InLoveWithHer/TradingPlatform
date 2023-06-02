@@ -72,4 +72,11 @@ public class AuctionController {
         return ResponseEntity.ok(maxUserBid);
     }
 
+//    @GetMapping("/advertisement/{id}/max-bid")
+//    @ResponseBody
+//    public String getMaxBidForAdvertisement(@PathVariable("id") Long advertisementId) {
+//        Double maxBid = auctionService.getMaxBidForAdvertisement(advertisementId);
+//        return String.valueOf(maxBid);
+//    }
+
 }

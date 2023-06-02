@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Неактивні оголошення</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/styles/pagination.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+    <script src="/static/scripts/inactiveAdvertisements.js"></script>
+</head>
+<body>
+<div class="modal fade" id="priceModal" tabindex="-1" aria-labelledby="priceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="priceModalLabel">Зміна ціни</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Форма для изменения цены -->
+                <form id="changePriceForm">
+                    <div class="mb-3">
+                        <label for="newPrice" class="form-label">Нова ціна</label>
+                        <input type="number" class="form-control" id="newPrice" placeholder="Введіть нову ціну">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Зберегти</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для подтверждения удаления -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmationModalLabel">Підтвердження видалення</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Ви впевнені, що бажаєте видалити оголошення?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Скасувати</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteButton" data-advertisement-id="" data-dismiss="modal">Видалити</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<header th:insert="~{blocks/header :: header}"></header>
+<div class="album py-5 bg-light" th:if="${inactiveAdvertisements.size() < 1}">
+    <h1 class="mt-2 text-center" style="color: #333;">Немає жодного неактивного оголошення</h1>
+</div>
+<div class="album py-5 bg-light" th:if="${inactiveAdvertisements.size() > 0}">
+    <div class="container">
+        <h1 class="mt-2 text-center" style="color: #333;">Неактивні оголошення</h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Заголовок</th>
+                <th scope="col">Дата створення</th>
+                <th scope="col">Ціна</th>
+                <th scope="col">Дії</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="advertisement : ${inactiveAdvertisements}">
+                <td>
+                    <a th:href="@{'/advertisement/' + ${advertisement.id}}" style="text-decoration: none; color: inherit;">
+                        <span th:text="${advertisement.title}"></span>
+                    </a>
+                    <span th:if="${advertisement.auction}" style="color: red; margin-left: 5px;">(Аукціон)</span>
+                </td>
+                <td th:text="${#dates.format(advertisement.createdAt, 'dd/MM/yyyy')}"></td>
+                <td th:text="${advertisement.price != null ? advertisement.price + ' грн' : '0 грн'}"></td>
+                <td>
+                    <button type="button" class="btn btn-outline-secondary btn-sm change-price-btn" data-bs-toggle="modal" data-bs-target="#priceModal" th:id="${advertisement.id}" th:disabled="${advertisement.auction}">Змінити ціну</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm make-inactive-btn" th:onclick="'makeActive(' + ${advertisement.id} + ')'">Зробити активним</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm delete-btn"  th:id="${advertisement.id}">Видалити</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="pagination" th:if="${inactiveAdvertisements.size() > 10}">
+            <ul>
+                <li th:unless="${currentPage == 0}">
+                    <a th:href="@{/personal-area(page=${currentPage - 1})}">&laquo;</a>
+                </li>
+                <li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
+                    th:class="${pageNumber == currentPage} ? 'active'">
+                    <a th:href="@{/personal-area(page=${pageNumber})}" th:text="${pageNumber + 1}"></a>
+                </li>
+                <li th:unless="${currentPage == totalPages - 1}">
+                    <a th:href="@{/personal-area(page=${currentPage + 1})}">&raquo;</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<footer th:insert="~{blocks/footer :: footer}"></footer>
+</body>
+</html>

@@ -12,10 +12,7 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class AuctionService {
@@ -86,5 +83,34 @@ public class AuctionService {
     public Double getMaxBidForUserInAuction(Long userId, Long auctionId) {
         return bidRepository.findMaxBidByUserIdAndAuctionId(userId, auctionId);
     }
+
+//    public Double getMaxBidForAdvertisement(Long advertisementId) {
+//        Optional<Advertisement> optionalAdvertisement = advertisementsRepository.findById(advertisementId);
+//
+//        if (optionalAdvertisement.isEmpty()) {
+//            return null; // или любое значение по умолчанию для случая, когда объявление не найдено
+//        }
+//
+//        Advertisement advertisement = optionalAdvertisement.get();
+//        Auction auction = advertisement.getAuction();
+//
+//        if (auction == null) {
+//            return null; // или любое значение по умолчанию для случая, когда у объявления нет аукциона
+//        }
+//
+//        List<Bid> bids = bidRepository.findByAuction(auction);
+//
+//        if (bids.isEmpty()) {
+//            return auction.getStartingBid();
+//        } else {
+//            Double maxBid = bids.stream()
+//                    .map(Bid::getBid)
+//                    .max(Double::compare)
+//                    .orElse(auction.getStartingBid());
+//            return maxBid;
+//        }
+//    }
+
+
 
 }

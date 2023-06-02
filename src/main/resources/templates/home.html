@@ -14,6 +14,17 @@
             background-color: #f1f1f1;
         }
     </style>
+    <script>
+        window.addEventListener('load', function() {
+            var titleElement = document.querySelector('.card-text');
+            if (titleElement) {
+                var titleText = titleElement.innerText;
+                if (titleText.length > 40) {
+                    titleElement.innerText = titleText.substring(0, 40) + '...';
+                }
+            }
+        });
+    </script>
 </head>
 <body>
 <header th:insert="~{blocks/header :: header}"></header>
@@ -43,7 +54,8 @@
                                 </a>
                             </div>
                             <div>
-                                <p class="card-text text-end" th:text="${advertisement.price} + ' грн'"></p>
+                                <p class="card-text text-end" th:if="${advertisement.auction == null}" th:text="${advertisement.price != null ? advertisement.price + ' грн' : '0 грн'}"></p>
+                                <p class="card-text text-end" th:if="${advertisement.auction != null}" th:text="Аукціон"></p>
                             </div>
                             <div class="d-flex justify-content-between">
                                 <p class="card-text" th:if="${advertisement.status}"

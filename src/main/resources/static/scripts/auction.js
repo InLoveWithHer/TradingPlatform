@@ -71,6 +71,10 @@ $(document).ready(function() {
     var startingBidText = $('#starting-bid').text().trim();
     var startingBid = parseFloat(startingBidText.replace(',', '.'));
 
+    if(maxBid < startingBid) {
+      maxBid = startingBid;
+    }
+
     if(maxUserBid == maxBid) {
       showAlert('Ваша ставка перемагає на аукціоні, тому ви не можете створити нову.');
       return;

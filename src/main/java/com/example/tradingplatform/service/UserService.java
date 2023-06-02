@@ -86,4 +86,14 @@ public class UserService {
         }
     }
 
+    public Page<Advertisement> getInactiveAdvertisements(int page, int pageSize, User user) {
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "createdAt"));
+        return advertisementRepository.findAllByUserIdAndIsActive(user.getId(), false, pageable);
+    }
+
+    public Page<Advertisement> getActiveAdvertisements(int page, int pageSize, User user) {
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "createdAt"));
+        return advertisementRepository.findAllByUserIdAndIsActive(user.getId(), true, pageable);
+    }
+
 }
