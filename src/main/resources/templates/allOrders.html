@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Всі замовлення</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/styles/pagination.css}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+    <style>
+        .clickable-title {
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        .clickable-title:hover {
+            color: red;
+        }
+
+        .clickable-title:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+<header th:insert="~{blocks/header :: header}"></header>
+
+<div class="row mb-4 mt-4">
+    <div class="col-md-12 text-center">
+        <div class="btn-group" role="group">
+            <a href="/personal-area/activeAdvertisements" class="btn btn-light rounded-pill mx-2" style="color: #333; background-color: #EDEDED; text-decoration: none;">Активні оголошення</a>
+            <a href="/personal-area/inactiveAdvertisements" class="btn btn-light rounded-pill mx-2" style="color: #333; background-color: #EDEDED; text-decoration: none;">Неактивні оголошення</a>
+            <a href="/personal-area/personalData/editing" class="btn btn-light rounded-pill mx-2" style="color: #333; background-color: #EDEDED; text-decoration: none;">Редагувати особисті дані</a>
+        </div>
+    </div>
+</div>
+<div class="album py-5 bg-light" th:if="${advertisements.size() < 1}">
+    <h1 class="mt-2 text-center" style="color: #333;">Немає жодного оголошення</h1>
+</div>
+<div class="album py-5 bg-light" th:if="${advertisements.size() > 0}">
+    <div class="container">
+        <h1 class="mt-2 text-center" style="color: #333;">Усі оголошення</h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Заголовок</th>
+                <th scope="col">Дата створення</th>
+                <th scope="col">Кількість відповідей</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="advertisement : ${advertisements}">
+                <td>
+                    <a th:href="@{'/personal-area/' + ${advertisement.id} + '/orders'}" style="text-decoration: none; color: inherit;">
+                        <span class="clickable-title" th:text="${advertisement.title}"></span>
+                    </a>
+                    <span th:if="${advertisement.auction}" style="color: red; margin-left: 5px;">(Аукціон)</span>
+                </td>
+                <td th:text="${#dates.format(advertisement.createdAt, 'dd/MM/yyyy')}"></td>
+                <td th:text="${advertisement.orderCount}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="pagination" th:if="${advertisements.size() > 10}">
+            <ul>
+                <li th:unless="${currentPage == 0}">
+                    <a th:href="@{/personal-area/allOrders(page=${currentPage - 1})}">&laquo;</a>
+                </li>
+                <li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}" th:class="${pageNumber == currentPage} ? 'active'">
+                    <a th:href="@{/personal-area/allOrders(page=${pageNumber})}" th:text="${pageNumber + 1}"></a>
+                </li>
+                <li th:unless="${currentPage == totalPages - 1}">
+                    <a th:href="@{/personal-area/allOrders(page=${currentPage + 1})}">&raquo;</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<footer th:insert="~{blocks/footer :: footer}"></footer>
+</body>
+</html>

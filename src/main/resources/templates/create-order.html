@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Створення замовлення</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<header th:insert="~{blocks/header :: header}"></header>
+
+<div class="container">
+    <h1>Створення замовлення</h1>
+
+    <form action="/advertisement/{advertisementId}/create-order" method="post" th:action="@{'/advertisement/' + ${advertisementId} + '/create-order'}">
+        <div class="mb-3">
+            <label for="name" class="form-label">Ім'я</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="mb-3">
+            <label for="surname" class="form-label">Прізвище</label>
+            <input type="text" class="form-control" id="surname" name="surname" required>
+        </div>
+        <div class="mb-3">
+            <label for="patronymic" class="form-label">По батькові</label>
+            <input type="text" class="form-control" id="patronymic" name="patronymic">
+        </div>
+        <div class="mb-3">
+            <label for="phone" class="form-label">Номер телефону</label>
+            <input type="tel" class="form-control" id="phone" name="phone" required>
+        </div>
+        <input type="submit" class="btn btn-primary" value="Оформити замовлення">
+    </form>
+</div>
+
+<footer th:insert="~{blocks/footer :: footer}"></footer>
+</body>
+</html>

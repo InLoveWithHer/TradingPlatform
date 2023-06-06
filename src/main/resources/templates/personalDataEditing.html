@@ -12,9 +12,17 @@
 </head>
 <body>
 <header th:insert="~{blocks/header :: header}"></header>
-
+<div class="row mb-4 mt-4">
+    <div class="col-md-12 text-center">
+        <div class="btn-group" role="group">
+            <a href="/personal-area/activeAdvertisements" class="btn btn-light rounded-pill mx-2" style="color: #333; background-color: #EDEDED; text-decoration: none;">Активні оголошення</a>
+            <a href="/personal-area/inactiveAdvertisements" class="btn btn-light rounded-pill mx-2" style="color: #333; background-color: #EDEDED; text-decoration: none;">Неактивні оголошення</a>
+            <a href="/personal-area/allOrders" class="btn btn-light rounded-pill mx-2" style="color: #333; background-color: #EDEDED; text-decoration: none;">Усі замовлення</a>
+        </div>
+    </div>
+</div>
 <div class="container">
-    <h1 class="mt-4 mb-4">Редагування персональних даних</h1>
+    <h1 class="mt-2 mb-4 text-center">Редагування персональних даних</h1>
     <form th:object="${user}" th:action="@{/personal-area/personalData/editing}" method="post" onsubmit="return validateForm()" id="form1">
         <div class="mb-3">
             <label for="name" class="form-label">Ім'я</label>

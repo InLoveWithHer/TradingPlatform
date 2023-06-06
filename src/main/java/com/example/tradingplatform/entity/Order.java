@@ -34,7 +34,7 @@ public class Order {
     private String phone;
 
     @Column
-    private String status;
+    private String status = "обробляється";
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

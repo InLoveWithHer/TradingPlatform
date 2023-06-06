@@ -52,6 +52,15 @@
 </div>
 
 <header th:insert="~{blocks/header :: header}"></header>
+<div class="row mb-4 mt-4">
+    <div class="col-md-12 text-center">
+        <div class="btn-group" role="group">
+            <a href="/personal-area/inactiveAdvertisements" class="btn btn-light rounded-pill mx-2" style="color: #333; background-color: #EDEDED; text-decoration: none;">Неактивні оголошення</a>
+            <a href="/personal-area/allOrders" class="btn btn-light rounded-pill mx-2" style="color: #333; background-color: #EDEDED; text-decoration: none;">Усі замовлення</a>
+            <a href="/personal-area/personalData/editing" class="btn btn-light rounded-pill mx-2" style="color: #333; background-color: #EDEDED; text-decoration: none;">Редагувати особисті дані</a>
+        </div>
+    </div>
+</div>
 <div class="album py-5 bg-light" th:if="${activeAdvertisements.size() < 1}">
     <h1 class="mt-2 text-center" style="color: #333;">Немає жодного Активного оголошення</h1>
 </div>
@@ -88,14 +97,14 @@
         <div class="pagination" th:if="${activeAdvertisements.size() > 10}">
             <ul>
                 <li th:unless="${currentPage == 0}">
-                    <a th:href="@{/personal-area(page=${currentPage - 1})}">&laquo;</a>
+                    <a th:href="@{/personal-area/activeAdvertisement(page=${currentPage - 1})}">&laquo;</a>
                 </li>
                 <li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
                     th:class="${pageNumber == currentPage} ? 'active'">
-                    <a th:href="@{/personal-area(page=${pageNumber})}" th:text="${pageNumber + 1}"></a>
+                    <a th:href="@{/personal-area/activeAdvertisement(page=${pageNumber})}" th:text="${pageNumber + 1}"></a>
                 </li>
                 <li th:unless="${currentPage == totalPages - 1}">
-                    <a th:href="@{/personal-area(page=${currentPage + 1})}">&raquo;</a>
+                    <a th:href="@{/personal-area/activeAdvertisement(page=${currentPage + 1})}">&raquo;</a>
                 </li>
             </ul>
         </div>

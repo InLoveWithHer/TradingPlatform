@@ -2,7 +2,7 @@ package com.example.tradingplatform.controller;
 
 import com.example.tradingplatform.entity.Advertisement;
 import com.example.tradingplatform.entity.User;
-import com.example.tradingplatform.service.AdvertisementService;
+import com.example.tradingplatform.service.OrderService;
 import com.example.tradingplatform.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -13,14 +13,17 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class PersonalAreaController {
     private final UserService userService;
+    private final OrderService orderService;
 
-    public PersonalAreaController(UserService userService) {
+    public PersonalAreaController(UserService userService, OrderService orderService) {
         this.userService = userService;
+        this.orderService = orderService;
     }
 
     @GetMapping("/personal-area")
@@ -84,7 +87,7 @@ public class PersonalAreaController {
                            @RequestParam(value = "phone", required = false, defaultValue = "") String phone,
                            @RequestParam(value = "email", required = false, defaultValue = "") String email,
                            @RequestParam(value = "password", required = false, defaultValue = "") String password) {
-        // Обновите только те поля, которые были заполнены
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
         User user = userService.getByEmail(userEmail);
@@ -150,6 +153,35 @@ public class PersonalAreaController {
         model.addAttribute("totalPages", activeAdvertisements.getTotalPages());
 
         return "activeAdvertisements";
+    }
+
+    @GetMapping("/personal-area/allOrders")
+    @PreAuthorize("isAuthenticated()")
+    public String showAllOrders(Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        User user = userService.getByEmail(userEmail);
+
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        Page<Advertisement> advertisements = userService.getAdvertisementsForUser(user, page, pageSize);
+
+        List<Advertisement> allAdvertisements = new ArrayList<>();
+        advertisements.iterator().forEachRemaining(allAdvertisements::add);
+
+        for (Advertisement advertisement : allAdvertisements) {
+            int orderCount = orderService.getOrderCountByAdvertisement(advertisement.getId());
+            advertisement.setOrderCount(orderCount);
+        }
+
+        model.addAttribute("user", user);
+        model.addAttribute("advertisements", allAdvertisements);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", advertisements.getTotalPages());
+
+        return "allOrders";
     }
 
 }

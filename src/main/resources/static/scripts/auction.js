@@ -2,8 +2,10 @@ $(document).ready(function() {
   var advertisementId = window.location.pathname.split('/').pop();
   var auctionID;
   var maxUserBid = 0;
-  var isAuthenticated = false; // Инициализация значения аутентификации при загрузке страницы
-  var maxBid = 0; // Переменная для хранения максимальной ставки
+  var isAuthenticated = false;
+  var isAuctionEnded = false;
+  var orderChecked = false;
+  var maxBid = 0;
   var currentUserID;
   var userId;
   var endDate;
@@ -218,10 +220,10 @@ $(document).ready(function() {
     });
   }
 
-  async function getMaxBidForUserInAuction(userId, auctionId) {
+  async function getMaxBidForUserInAuction(userId, auctionID) {
     try {
       var response = await $.ajax({
-        url: '/user/' + userId + '/auction/' + auctionId + '/maxBid',
+        url: '/user/' + userId + '/auction/' + auctionID + '/maxBid',
         type: 'GET'
       });
       return response;
@@ -247,6 +249,10 @@ $(document).ready(function() {
       // Проверяем, сколько времени осталось до окончания аукциона
       if (distance < 0) {
         countdownElement.textContent = 'Аукціон завершено';
+        isAuctionEnded = true;
+        if(!orderChecked) {
+          checkBids();
+        }
       } else {
         var days = Math.floor(distance / (1000 * 60 * 60 * 24));
         var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -271,5 +277,46 @@ $(document).ready(function() {
     // Запускаем обновление отображения обратного отсчета каждую секунду
     setInterval(updateCountdown, 1000);
   }
+
+  async function checkBids() {
+    if (maxBid > 0) {
+      // Проверка наличия заказа на сервере
+      $.ajax({
+        url: '/advertisement/' + advertisementId + '/checkOrder',
+        type: 'GET',
+        success: function(response) {
+          if (response.orderExists) {
+            orderChecked = true;
+            return;
+          } else {
+            createOrder();
+          }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+          // Обработка ошибки проверки заказа
+        }
+      });
+    }
+    // Если аукцион завершен, отключаем кнопку "Сделать ставку" и поле ввода
+    if (isAuctionEnded) {
+      $('#bid-amount').prop('disabled', true);
+      $('#submit-bid').prop('disabled', true);
+      $('#submit-bid').addClass('disabled');
+    }
+  }
+
+  function createOrder() {
+    $.ajax({
+      url: '/auction/' + auctionID + '/createOrder/maxBid',
+      type: 'POST',
+      success: function(response) {
+        // Обработка успешного создания заказа
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        // Обработка ошибки создания заказа
+      }
+    });
+  }
+
 
 });

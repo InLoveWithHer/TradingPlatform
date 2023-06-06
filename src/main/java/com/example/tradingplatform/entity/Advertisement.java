@@ -73,8 +73,10 @@ public class Advertisement {
     @JsonIgnore
     private Auction auction;
 
+    @Transient
+    private int orderCount;
 
-    public Advertisement(String title,Double price, Category category, Subcategory subcategory, String status, String description, String type, String fileName, User user, Auction auction) {
+    public Advertisement(String title, Double price, Category category, Subcategory subcategory, String status, String description, String type, String fileName, User user, Auction auction) {
         this.title = title;
         this.price = price;
         this.category = category;

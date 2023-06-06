@@ -5,6 +5,7 @@ import com.example.tradingplatform.entity.Bid;
 import com.example.tradingplatform.service.AuctionService;
 import com.example.tradingplatform.service.UserService;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,16 +26,22 @@ public class AuctionController {
     }
 
     @PostMapping("advertisement/{advertisementId}/auction/createBids")
-    public ResponseEntity<Bid> createBid(Authentication authentication, @PathVariable Long advertisementId, @RequestParam Double price) {
+    public ResponseEntity<?> createBid(Authentication authentication, @PathVariable Long advertisementId, @RequestParam Double price) {
         if (authentication != null && authentication.isAuthenticated()) {
             User user = userService.getByEmail(authentication.getName());
             Bid createdBid = auctionService.createBid(advertisementId, price, user);
+            if (user.getName() == null) {
+                HttpHeaders headers = new HttpHeaders();
+                headers.add("Location", "/namePhone");
+                return ResponseEntity.status(HttpStatus.FOUND).headers(headers).build();
+            }
             return ResponseEntity.ok(createdBid);
         } else {
             // Обработка случая, когда пользователь не авторизован
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
+
 
     @GetMapping("advertisement/{advertisementId}/auction/bids")
     public ResponseEntity<List<Bid>> getBids(@PathVariable Long advertisementId) throws ChangeSetPersister.NotFoundException {
@@ -72,11 +79,5 @@ public class AuctionController {
         return ResponseEntity.ok(maxUserBid);
     }
 
-//    @GetMapping("/advertisement/{id}/max-bid")
-//    @ResponseBody
-//    public String getMaxBidForAdvertisement(@PathVariable("id") Long advertisementId) {
-//        Double maxBid = auctionService.getMaxBidForAdvertisement(advertisementId);
-//        return String.valueOf(maxBid);
-//    }
 
 }

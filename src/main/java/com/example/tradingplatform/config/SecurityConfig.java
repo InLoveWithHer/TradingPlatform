@@ -21,7 +21,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/personal-area", "/logout", "/createAdvertisements", "/personal-area/personalData/editing", "/personal-area/inactiveAdvertisements", "/personal-area/activeAdvertisements").authenticated()
+                .antMatchers("/personal-area", "/logout", "/createAdvertisements", "/personal-area/personalData/editing",
+                        "/personal-area/inactiveAdvertisements", "/personal-area/activeAdvertisements", "/personal-area/allOrders",
+                        "/personal-area/{advertisementId}/orders").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
