@@ -203,4 +203,29 @@ public class AdvertisementController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/advertisements/filter")
+    public String getAdvertisementsPage(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String subcategory,
+            @RequestParam(required = false) Boolean auction,
+            @RequestParam(required = false) Double priceMin,
+            @RequestParam(required = false) Double priceMax,
+            Model model) {
+
+        int pageSize = 6; // количество записей на странице
+        Page<Advertisement> advertisementsPage = advertisementService.getFilteredAdvertisements(page, pageSize, type, status, category, subcategory, auction, priceMin, priceMax);
+        List<Advertisement> advertisements = advertisementsPage.getContent();
+        int totalPages = advertisementsPage.getTotalPages();
+
+        model.addAttribute("advertisements", advertisements);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+
+        return "advertisements";
+    }
+
+
 }

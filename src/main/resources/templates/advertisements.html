@@ -16,19 +16,103 @@
         a:hover {
             background-color: #f1f1f1;
         }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .btn-primary {
+            margin-top: 2rem;
+        }
+
+        .btn-filter {
+            width: 100%;
+        }
+
+        .row > .col {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
 <header th:insert="~{blocks/header :: header}"></header>
 
 <main>
-    <section class="py-5 text-center container">
-        <div class="row py-lg-5">
-            <div class="col-lg-6 col-md-8 mx-auto">
-                <h1 class="fw-light">Всі оголошення</h1>
+    <form th:action="@{/advertisements/filter}" method="get">
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label for="type" class="form-label">Тип:</label>
+                    <select class="form-select form-select-sm" id="type" name="type">
+                        <option value="">Всі</option>
+                        <option value="Безкоштовно">Безкоштовно</option>
+                        <option value="Ціна договірна">Ціна договірна</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label for="status" class="form-label">Статус:</label>
+                    <select class="form-select form-select-sm" id="status" name="status">
+                        <option value="">Всі</option>
+                        <option value="Б/У">Б/У</option>
+                        <option value="Нове">Нове</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label for="category" class="form-label">Категорія:</label>
+                    <select class="form-select form-select-sm" id="category" name="category">
+                        <option value="">Всі</option>
+                        <!-- Здесь добавьте опции для категорий -->
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label for="subcategory" class="form-label">Підкатегорія:</label>
+                    <select class="form-select form-select-sm" id="subcategory" name="subcategory">
+                        <option value="">Всі</option>
+                        <!-- Здесь добавьте опции для подкатегорий -->
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label for="auction" class="form-label">Аукціон:</label>
+                    <select class="form-select form-select-sm" id="auction" name="auction">
+                        <option value="">Всі</option>
+                        <option value="true">Так</option>
+                        <option value="false">Ні</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="priceMin" class="form-label">Ціна від:</label>
+                            <input type="text" class="form-control form-control-sm" id="priceMin" name="priceMin">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="priceMax" class="form-label">Ціна до:</label>
+                            <input type="text" class="form-control form-control-sm" id="priceMax" name="priceMax">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary btn-filter">Фільтрувати</button>
+                    <button type="button" class="btn btn-secondary" onclick="resetFilters()">Скинути фільтри</button>
+                </div>
             </div>
         </div>
-    </section>
+    </form>
+
+
 
     <div class="album py-5 bg-light">
         <div class="container">

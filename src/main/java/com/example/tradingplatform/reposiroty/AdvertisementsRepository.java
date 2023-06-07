@@ -15,5 +15,5 @@ public interface AdvertisementsRepository extends JpaRepository<Advertisement, L
     Page<Advertisement> findByTitleContainingIgnoreCase(String searchTerm, Pageable pageable);
     Page<Advertisement> findAllByUserId(Long userId, Pageable pageable);
     Page<Advertisement> findAllByUserIdAndIsActive(Long id, boolean b, Pageable pageable);
-
+    List<Advertisement> findAll();
 }

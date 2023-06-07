@@ -109,4 +109,8 @@ public class Advertisement {
         return this.subcategory.getName();
     }
 
+    public boolean isAuction() {
+        return auction != null;
+    }
+
 }

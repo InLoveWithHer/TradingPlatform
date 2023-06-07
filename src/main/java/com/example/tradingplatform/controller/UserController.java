@@ -34,7 +34,6 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    // Метод для проверки статуса аутентификации пользователя
     @GetMapping("/api/user/authenticated")
     public ResponseEntity<Boolean> isAuthenticated(Authentication authentication) {
         boolean isAuthenticated = authentication != null && authentication.isAuthenticated();

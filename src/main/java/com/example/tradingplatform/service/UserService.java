@@ -96,4 +96,15 @@ public class UserService {
         return advertisementRepository.findAllByUserIdAndIsActive(user.getId(), true, pageable);
     }
 
+    public void updateUserRoleToAdmin(String userEmail) {
+        Optional<User> userOptional = usersRepository.findByEmail(userEmail);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setRole("ADMIN");
+            usersRepository.save(user);
+        } else {
+            throw new ResNotFoundException("User not found with email: " + userEmail);
+        }
+    }
+
 }

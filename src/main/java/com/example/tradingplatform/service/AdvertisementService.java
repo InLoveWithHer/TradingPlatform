@@ -5,19 +5,17 @@ import com.example.tradingplatform.exception.ResNotFoundException;
 import com.example.tradingplatform.reposiroty.*;
 import com.example.tradingplatform.util.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AdvertisementService {
@@ -151,5 +149,40 @@ public class AdvertisementService {
         }
     }
 
+    public Page<Advertisement> getFilteredAdvertisements(int page, int pageSize, String type, String status, String category, String subcategory, Boolean auction, Double priceMin, Double priceMax) {
+        List<Advertisement> allAdvertisements = advertisementRepository.findAll();
+
+        List<Advertisement> filteredAdvertisements = filterAdvertisements(allAdvertisements, type, status, category, subcategory, auction, priceMin, priceMax);
+
+        return getPage(filteredAdvertisements, page, pageSize);
+    }
+
+    private Page<Advertisement> getPage(List<Advertisement> advertisements, int page, int pageSize) {
+        int totalItems = advertisements.size();
+        int totalPages = (int) Math.ceil((double) totalItems / pageSize);
+
+        List<Advertisement> pageContent = advertisements.stream()
+                .skip((long) page * pageSize)
+                .limit(pageSize)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(pageContent, PageRequest.of(page, pageSize), totalItems);
+    }
+
+    public List<Advertisement> filterAdvertisements(List<Advertisement> advertisements, String type, String status, String categoryName, String subcategoryName, Boolean auction, Double priceMin, Double priceMax) {
+        List<Advertisement> filteredAdvertisements = new ArrayList<>();
+        for (Advertisement advertisement : advertisements) {
+            if ((type == null || type.equals(advertisement.getType()))
+                    && (status == null || status.equals(advertisement.getStatus()))
+                    && (categoryName == null || categoryName.equals(advertisement.getCategory().getName()))
+                    && (subcategoryName == null || subcategoryName.equals(advertisement.getSubcategory().getName()))
+                    && (auction == null || (advertisement.isAuction() && auction))
+                    && (priceMin == null || (advertisement.getPrice() != null && advertisement.getPrice() >= priceMin))
+                    && (priceMax == null || (advertisement.getPrice() != null && advertisement.getPrice() <= priceMax))) {
+                filteredAdvertisements.add(advertisement);
+            }
+        }
+        return filteredAdvertisements;
+    }
 
 }

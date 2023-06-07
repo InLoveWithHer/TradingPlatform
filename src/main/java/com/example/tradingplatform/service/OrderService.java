@@ -4,7 +4,6 @@ import com.example.tradingplatform.entity.*;
 import com.example.tradingplatform.reposiroty.AuctionRepository;
 import com.example.tradingplatform.reposiroty.BidRepository;
 import com.example.tradingplatform.reposiroty.OrderRepository;
-import com.example.tradingplatform.reposiroty.UsersRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
